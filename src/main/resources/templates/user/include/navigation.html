@@ -30,8 +30,29 @@
                 x : 50,
                 y : 130
             },
-          delay : 3000
+          delay : 300000
         }
     );
+    $('.close').bind('click', function () {
+
+        $.ajax({
+            url: '/api/reservation/notifyoff/' ,
+            method :'GET',
+            dataType: 'text',
+            success: function (response) {
+                var result = response['result'];
+                var data = response['message'];
+                // $('#text-discount').val('');
+                if (!result)
+                {
+                    alert(data);
+                    return;
+                }
+                else
+                {
+                }
+            }
+        });
+    });
 </script>
 {{/notify}}

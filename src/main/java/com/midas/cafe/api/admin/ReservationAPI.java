@@ -1,5 +1,6 @@
 package com.midas.cafe.api.admin;
 
+import com.midas.cafe.model.LoginVO;
 import com.midas.cafe.model.Result;
 import com.midas.cafe.service.ReservationService;
 import com.midas.cafe.service.UserService;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * User: kimkm
@@ -36,4 +39,11 @@ public class ReservationAPI
 		return reservationService.updateStatus(reservationCode, reservStatus);
 	}
 
+	@GetMapping("/reservation/notifyoff")
+	public Result notifyOff(HttpSession session)
+	{
+		LoginVO login = (LoginVO) session.getAttribute("login");
+		String loginID = login.getId();
+		return userService.notifyOff(loginID);
+	}
 }

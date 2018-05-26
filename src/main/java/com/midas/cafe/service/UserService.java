@@ -57,6 +57,11 @@ public class UserService
 
     public int updateUserInfo(User user) throws Exception
     {return userDao.updateUser(user);}
+
+    public Result notifyOff(String loginID)
+    {
+	    return new Result(true, userDao.notifyOff(loginID));
+    }
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);
