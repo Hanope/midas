@@ -1,5 +1,6 @@
 package com.midas.cafe.repository.user;
 
+import com.midas.cafe.common.Crypt;
 import com.midas.cafe.model.Reservation;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
@@ -28,12 +29,13 @@ public class UserDao
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public int insertUser(User user){
+	public int insertUser(User user) throws Exception
+	{
 		String sql="INSERT INTO mi_user (loginid,pwd,name,email,mobile,create_dt,birth,group_code)" +
 				"VALUES(?,?,?,?,?,?,?,?, )";
 		System.out.println("유저:"+user.getName());
-		return jdbcTemplate.update(sql,user.getId(),user.getPassword(),user.getName(),
-				user.getEmail(),user.getPhone(),new Date(),user.getBirthday(),user.getGroupCode());
+		return jdbcTemplate.update(sql, user.getId(), Crypt.encrypt(user.getPassword()), user.getName(),
+		                           user.getEmail(), user.getPhone(), new Date(), user.getBirthday(), user.getGroupCode());
 	}
 
 	public String selectPwById(String id){
@@ -68,17 +70,18 @@ public class UserDao
 		return user;
 	}
 
-	public int updateUser(User user){
+	public int updateUser(User user) throws Exception
+	{
 		String sql="UPDATE mi_user SET name = ?, pwd = ?, mobile = ?," +
 				"email = ?, birth = ?  WHERE loginid = ? ";
-		int result=jdbcTemplate.update(sql, user.getName(), user.getPassword(),
+		int result=jdbcTemplate.update(sql, user.getName(), Crypt.encrypt(user.getPassword()),
 				user.getPhone(),user.getEmail(),user.getBirthday(),user.getId());
 		return result;
 	}
 
 	public List<UserReservation> selectReservation(String loginID)
 	{
-		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  ORDER BY create_dt DESC";
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  AND status IN('0','1','2') ORDER BY create_dt DESC";
 		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
 		List<UserReservation> reservationList = new ArrayList<>();
 		for(Map<String,Object> map : list)
@@ -118,6 +121,17 @@ public class UserDao
 	{
 		String sql = "SELECT LAST_INSERT_ID()";
 		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+
+	public List<Map<String,Object>> getCompleteReserveOrder(String loginID)
+	{
+		String sql = "select d.name category_name, c.name cafe_name, c.price, b.amount\n" +
+				"  from mi_rsr a, mi_rsr_detail b, mi_cafe_menu c, mi_category d\n" +
+				"where a.status = ? and a.loginid = ?\n" +
+				"  and a.code = b.code\n" +
+				"  and b.menucode = c.code\n" +
+				"  and c.category_code = d.code ";
+		return jdbcTemplate.queryForList(sql, ReservationStatus.READY.getCode(),loginID);
 	}
 
 	public int updateUserCancel(UserReservation reservation)

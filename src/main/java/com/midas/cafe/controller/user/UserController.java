@@ -1,5 +1,6 @@
 package com.midas.cafe.controller.user;
 
+import com.midas.cafe.common.Crypt;
 import com.midas.cafe.common.DateUtil;
 import com.midas.cafe.common.StrUtil;
 import com.midas.cafe.model.LoginVO;
@@ -47,12 +48,15 @@ public class UserController
 		try{
 			String pwd = userService.selectPwById(id);
 
-			if(pwd != null && login.getPassword().equals(pwd)){
+			if(pwd != null && Crypt.encrypt(login.getPassword()).equals(pwd)){
+//			if(pwd != null && login.getPassword().equals(pwd)){
 				User userInfo= userService.selectUserById(id);
 				login.setId(userInfo.getId());//세션에 로그인정보 할당
 				login.setName(userInfo.getName());
 				login.setRole(userInfo.getRole());
 				session.setAttribute("login",login);
+				String notiMsg = userService.getCompleteReserveOrderNotifyMessage(login.getId());
+				session.setAttribute("notify", notiMsg.equals("") ? null : notiMsg);
 			}else{
 				model.addAttribute("loginFailMsg",Boolean.TRUE);
 				return "redirect:/";

@@ -70,7 +70,7 @@
         //   $checkbox.prop("checked",!$checkbox.prop("checked"))
         //   e.preventDefault();
         // });
-        $(function () {
+        $(document).ready(function () {
             $("#datepicker").datepicker(
                 {
                     dateFormat: 'yy-mm-dd'
@@ -163,8 +163,6 @@
               alert('등록할 값이 없습니다.');
               return false;
           }
-
-          alert(saveStr);
 
           // 예약일시가 입력되었는지 확인한다.
           if($('#datepicker').val() == ""){

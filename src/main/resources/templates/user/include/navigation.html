@@ -17,3 +17,21 @@
     </div>
   </div>
 </nav>
+{{#notify}}
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap-notify.min.js"></script>
+<script>
+    $.notify({
+            icon: 'fa fa-paw',
+            message: '{{notify}}'
+        }, {
+            type: 'warning',
+            offset: {
+                x : 50,
+                y : 130
+            },
+          delay : 300
+        }
+    );
+</script>
+{{/notify}}

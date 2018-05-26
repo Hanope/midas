@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sun.applet.resources.MsgAppletViewer;
 
 /**
  * User: kimkm
@@ -22,7 +24,8 @@ public class UserService
 	@Autowired
 	private UserDao userDao;
 
-	public int joinUser(User user){
+	public int joinUser(User user) throws Exception
+	{
 		return userDao.insertUser(user);
 	}
 
@@ -35,7 +38,25 @@ public class UserService
 
     public User selectUserById(String id){ return userDao.selectUserById(id); }
 
-    public int updateUserInfo(User user){return userDao.updateUser(user);}
+    public String getCompleteReserveOrderNotifyMessage(String loginID)
+    {
+	    List<Map<String,Object>> list = userDao.getCompleteReserveOrder(loginID);
+	    String msg = "";
+	    for (Map<String,Object> map : list)
+	    {
+	    	if(msg.length() != 0)
+			    msg += ",";
+		    String name = (String) map.get("cafe_name");
+		    String amount = map.get("amount") + "";
+		    msg += (name + " " + amount + "개");
+	    }
+	    if(msg.length() != 0)
+		    msg += " 가 준비완료 되었습니다.";
+	    return msg;
+    }
+
+    public int updateUserInfo(User user) throws Exception
+    {return userDao.updateUser(user);}
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);
