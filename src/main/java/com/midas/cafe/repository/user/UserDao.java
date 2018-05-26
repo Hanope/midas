@@ -3,6 +3,7 @@ package com.midas.cafe.repository.user;
 import com.midas.cafe.model.Reservation;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
+import com.midas.cafe.model.enumelem.ReservationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -72,7 +73,7 @@ public class UserDao
 
 	public List<UserReservation> selectReservation(String loginID)
 	{
-		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where login_id = ?  ";
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  ORDER BY create_dt DESC";
 		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
 		List<UserReservation> reservationList = new ArrayList<>();
 		for(Map<String,Object> map : list)
@@ -90,15 +91,32 @@ public class UserDao
 		return reservationList;
 	}
 
-	public int insertReservation(UserReservation reservation)
+	public int insertReservation(String loginID, String reserveDate, String description)
 	{
-		String sql = "INSERT INTO mi_rsr (loginid, create_dt, reserve_dt, status, description) VALUES (?,now(),?,?,?)";
-		return jdbcTemplate.update(sql, reservation.getUserId(), reservation.getReserveDt(), reservation.getStatus().getCode(), reservation.getDescription());
+		String sql = "INSERT INTO mi_rsr (loginid, create_dt, reserve_dt, status, description) VALUES (?,now(),str_to_date(?,'%Y-%m-%d'),?,?)";
+		return jdbcTemplate.update(sql, loginID, reserveDate, ReservationStatus.REQUEST.getCode(), description);
+	}
+
+	public int insertReservationDetail(Integer code, String menuCode, String amount)
+	{
+		String sql = "INSERT INTO mi_rsr_detail (code, menucode, amount) values (?,?,?)";
+		return jdbcTemplate.update(sql, code, menuCode, amount);
+	}
+
+	public Integer getLastInsertID()
+	{
+		String sql = "SELECT LAST_INSERT_ID()";
+		return jdbcTemplate.queryForObject(sql, Integer.class);
 	}
 
 	public int updateUserCancel(UserReservation reservation)
 	{
 		String sql = "UPDATE mi_rsr SET status = ?, usr_cancel_rs = ? WHERE code = ? ";
 		return jdbcTemplate.update(sql, reservation.getStatus().getCode(), reservation.getUserCancelDesc());
+	}
+
+	public List<Map<String, Object>> findAllUser() {
+		String query = "SELECT u.loginid as id, u.name, u.mobile, u.email, u.create_dt, u.birth,  g.name as depart  FROM MI_USER as u INNER JOIN mi_group g ON group_code = g.code";
+		return jdbcTemplate.queryForList(query);
 	}
 }

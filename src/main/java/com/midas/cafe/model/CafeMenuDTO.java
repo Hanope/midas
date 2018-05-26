@@ -7,13 +7,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CafeMenu {
+public class CafeMenuDTO {
 
   private int code;
   private String name;
   private int price;
   private String categoryCode;
-  private int imgNo;
+  private String imgSrc;
   private char status;
 
 }

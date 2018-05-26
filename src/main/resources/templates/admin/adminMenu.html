@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {{ > /include/header}}
+</head>
+
+<body>
+    {{ > /include/navigation}}
+    <main class="page projects-page">
+        <section class="portfolio-block projects-cards">
+            <div class="container">
+                <div class="heading">
+                    <h2>메뉴관리</h2>
+                </div>
+                <form class="search-form">
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div><input class="form-control" type="text" id="text-menu" placeholder="I am looking for..">
+                        <div class="input-group-append"><button class="btn btn-light" id="btn-menu-search" type="button">Search </button></div>
+                    </div>
+                </form>
+                <div class="row product-list">
+                    {{#menus}}
+                    <div class="col-sm-6 col-md-4 product-item">
+                        <div class="product-container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="#" class="product-image">
+                                        <img src="{{#file_url}}{{file_url}}{{/file_url}}{{^file_url}}/img/default.png{{/file_url}}">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h2><a href="#">{{menu_name}}</a></h2>
+                                </div>
+                                <div class="col-4"><a href="#" class="small-text">게시중</a></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p class="product-description">{{category_name}}</p>
+                                    <div class="row"><div class="col-12"><p class="product-price">{{price}}원</p></div></div>
+                                    <div class="row">
+                                        <input type="hidden" value="{{menu_code}}">
+                                        <div class="col-6"><button class="btn btn-light btn-modify" type="button" data-toggle="modal" data-target="#modifyModal">수정</button></div>
+                                        <div class="col-6"><button class="btn btn-danger btn-delete" type="button" data-toggle="modal" data-target="#deleteModal">삭제</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/menus}}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="modifyModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">메뉴 수정</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-container">
+                        <form action="/admin/menu/modify" method="post" enctype="multipart/form-data">
+                            <div class="form-group"><input class="form-control" type="text" placeholder="메뉴명" name="name" id="modified-name"></div>
+                            <div class="form-group"><input class="form-control" type="text" placeholder="가격" name="price" id="modified-price"></div>
+                            <div class="form-group"><label>이미지를 선택해주세요</label><input type="file" class="form-control-file" name="file"></div>
+                            <div class="form-group"><input type="hidden" name="code" id="menu_code"><button class="btn btn-info btn-block" id="btn-modify-submit">수정하기</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">정말 삭제하시겠습니까?</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-container">
+                        <div class="form-group">
+                            <button class="btn btn-danger btn-block" id="btn-remove-yes">네</button>
+                            <button class="btn btn-primary btn-block" id="btn-remove-cancel">아니오</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ > /include/footer }}
+
+    <script>
+        var menuNo;
+
+        $('#btn-menu-search').click(function() {
+          var menuName = $('#text-menu').val();
+          $.ajax({
+            url: '/api/admin/menus/' + menuName,
+            dataType: 'json',
+            success: function(response) {
+              var result = response['result'];
+              var data = response['message'];
+
+              if (!result) {
+                alert(data);
+                return;
+              } else {
+                $('.product-item').remove();
+                for (var i = 0; i < data.length; i++) {
+                  $('.product-list').append(viewMenus(data[i]));
+                }
+              }
+            }
+          });
+        });
+
+        $('#btn-remove-cancel').click(function() {
+          $('#deleteModal').modal('toggle');
+        });
+
+        $(document).on('click', '.btn-modify', function() {
+          menuNo = $(this).parent().siblings('input').val();
+          $('#menu_code').val(menuNo);
+        });
+
+        $(document).on('click', '.btn-delete', function() {
+          menuNo = $(this).parent().siblings('input').val();
+        });
+
+        $('#btn-remove-yes').click(function() {
+          $.ajax({
+            url:'/api/admin/menus/' + menuNo,
+            method: 'delete',
+            dataType: 'json',
+            success: function(response) {
+              alert(response['message']);
+              $('#deleteModal').modal('toggle');
+              location.reload();
+            }
+          });
+        });
+
+
+        function viewMenus(data) {
+          var img_url = data['file_url'] == null ? '/img/default.png' : data['file_url'];
+          var template = '<div class="col-sm-6 col-md-4 product-item">\n'
+              + '                        <div class="product-container">\n'
+              + '                            <div class="row">\n'
+              + '                                <div class="col-md-12">\n'
+              + '                                    <a href="#" class="product-image">\n'
+              + '                                        <img src="' + img_url +'">\n'
+              + '                                    </a>\n'
+              + '                                </div>\n'
+              + '                            </div>\n'
+              + '                            <div class="row">\n'
+              + '                                <div class="col-8">\n'
+              + '                                    <h2><a href="#">' + data['menu_name'] + '</a></h2>\n'
+              + '                                </div>\n'
+              + '                                <div class="col-4"><a href="#" class="small-text">게시중</a></div>\n'
+              + '                            </div>\n'
+              + '                            <div class="row">\n'
+              + '                                <div class="col-12">\n'
+              + '                                    <p class="product-description">' + data['category_name'] + '</p>\n'
+              + '                                    <div class="row"><div class="col-12"><p class="product-price">' + data['price'] + '원</p></div></div>\n'
+              + '                                    <div class="row">\n'
+              + '                                        <input type="hidden" value="' + data['menu_code'] + '">\n'
+              + '                                        <div class="col-6"><button class="btn btn-light btn-modify" type="button" data-toggle="modal" data-target="#modifyModal">수정</button></div>\n'
+              + '                                        <div class="col-6"><button class="btn btn-danger" type="button" data-toggle="modal" data-target="#deleteModal">삭제</button></div>\n'
+              + '                                    </div>\n'
+              + '                                </div>\n'
+              + '                            </div>\n'
+              + '                        </div>\n'
+              + '                    </div>'
+          return template;
+        }
+
+    </script>
+</body>
+
+</html>

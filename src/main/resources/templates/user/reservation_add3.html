@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDAS</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table-1.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="/assets/css/Registration-Form-with-Photo.css">
+    <link rel="stylesheet" href="/assets/css/jquery-ui.css">
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean">
+            <div class="container"><a class="navbar-brand" href="#">MIDAS user</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse"
+                    id="navcol-1">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">회원관리</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">메뉴관리</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">예약관리</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="register-photo">
+        <button class="btn btn-sm btn-primary btn-create" type="button" onclick="page.goList()" style="margin-left: 120px">목록으로</button>
+        <div class="form-container" style="margin-left:120px;margin-top: 30px">
+            <form method="post">
+                <h2 class="text-center"><strong>예약등록</strong></h2>
+            <div class="form-group"><label>예약일시</label><input class="form-control" placeholder="예약일시" type="text" id="datepicker"></div>
+            <button class="btn btn-secondary btn-sm" id="menuadd">메뉴추가</button>
+            <!--<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" id="menuadd">메뉴추가</button>-->
+                <table id="my_table">
+                    <tr><td>
+                        <div class="form-group"><label>품목선택</label> <select class="form-control">
+                            <option value="12" selected="">커피</option>
+                            <option value="13">딸기</option>
+                            <option value="14">빵</option>
+                        </select></div>
+                        <div class="form-group"><label>수량</label><input class="form-control" type="text" placeholder="주문수량입력"></div>
+                    </td></tr>
+                </table>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit" style="background-color:rgb(71,119,244);">등록하기</button></div>
+        </form>
+    </div>
+    </div>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker(
+                {
+                    dateFormat:'yy-mm-dd'
+                }
+            );
+
+        });
+
+        $(document).ready(){
+            var htmlrow = '<tr><td><div class="modal-body"> <div class="form-group"><label>품목선택</label> <select class="form-control"> <option value="12" selected="">커피</option> <option value="13">딸기</option> <option value="14">빵</option> </select> </div> <div class="form-group"><label>수량</label><input class="form-control" type="text" placeholder="주문수량입력"></div> </div></td></tr>'
+            $('#menuadd').appendChild(htmlrow);
+        }
+        var page =
+            {
+                goList: function () {
+                    window.location.href = '/user/reservation';
+                }
+            };
+    </script>
+
+    <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal">메뉴추가</button>
+
+    <!-- 모달 처리 부분 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">예약할 메뉴 선택</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group"><label>품목선택</label>
+                        <select class="form-control" id="type_select">
+                            <option value="12" selected="">커피</option>
+                            <option value="13">딸기</option>
+                            <option value="14">빵</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>수량</label><input class="form-control" type="text" placeholder="주문수량입력"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary">저장후 닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

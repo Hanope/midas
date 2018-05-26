@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {{ > /include/header}}
+</head>
+
+<body>
+{{ > /include/navigation}}
+
+<main class="page projects-page">
+    <table class="table user-table">
+        <thead>
+            <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>부서</th>
+                <th>전화번호</th>
+                <th>이메일</th>
+                <th>가입일</th>
+                <th>생일</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#users}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{depart}}</td>
+                <td>{{mobile}}</td>
+                <td>{{email}}</td>
+                <td>{{create_dt}}</td>
+                <td>{{birth}}</td>
+                <td>
+                    <button class="btn btn-info btn-coupon" data-toggle="modal" data-target="#couponModal">쿠폰발급</button>
+                    <button class="btn btn-danger btn-delete">삭제</button>
+                </td>
+            </tr>
+            {{/users}}
+        </tbody>
+    </table>
+</main>
+
+<div class="modal" id="couponModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">쿠폰 발급</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-container">
+                    <div class="form-group">
+                        <label>카테고리</label>
+                        <select name="categoryCode" class="form-control" id="select-category">
+                            <optgroup label="카테고리 선택"></optgroup>
+                        </select>
+                    <div class="form-group"><label>할인율</label><input type="text" class="form-control" name="discountPercent" id="text-discount" placeholder="100%"></div>
+                    <div class="form-group">
+                        <label>시작일</label>
+                        <input type="text" class="form-control" name="startDate" placeholder="2018-05-26">
+                        <label>종료일</label>
+                        <input type="text" class="form-control" name="endDate" placeholder="2018-06-26">
+                    </div>
+                    <div class="form-group"><input type="hidden" id="modified-code"><button class="btn btn-info btn-block" id="btn-issue">발급하기</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    {{ > /include/footer }}
+
+<script>
+  $('#couponModal').on('shown.bs.modal', function(e) {
+    $.ajax({
+      url: '/api/category/',
+      dataType: 'json',
+      success: function(response) {
+        var result = response['result'];
+        var data = response['message'];
+        $('#text-discount').val('');
+        if (!result) {
+          alert(data);
+          return;
+        } else {
+          $('#select-category option').remove();
+          for (var i = 0; i < data.length; i++) {
+            var option = '<option value="' + data[i]['code'] +'">' + data[i]['name'] +'</option>'
+            $('#select-category').append(option);
+          }
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '#btn-modify', function() {
+    var name = $('#modified-name').val();
+    var price = $('#modified-price').val();
+
+    console.log(name);
+    console.log(price);
+  });
+
+  function viewMenus(data) {
+    var img_url = data['file_url'] == null ? '/img/default.png' : data['file_url'];
+    var template = '<div class="col-sm-6 col-md-4 product-item">\n'
+        + '                        <div class="product-container">\n'
+        + '                            <div class="row">\n'
+        + '                                <div class="col-md-12">\n'
+        + '                                    <a href="#" class="product-image">\n'
+        + '                                        <img src="' + img_url +'">\n'
+        + '                                    </a>\n'
+        + '                                </div>\n'
+        + '                            </div>\n'
+        + '                            <div class="row">\n'
+        + '                                <div class="col-8">\n'
+        + '                                    <h2><a href="#">' + data['menu_name'] + '</a></h2>\n'
+        + '                                </div>\n'
+        + '                                <div class="col-4"><a href="#" class="small-text">게시중</a></div>\n'
+        + '                            </div>\n'
+        + '                            <div class="row">\n'
+        + '                                <div class="col-12">\n'
+        + '                                    <p class="product-description">' + data['category_name'] + '</p>\n'
+        + '                                    <div class="row"><div class="col-12"><p class="product-price">' + data['price'] + '원</p></div></div>\n'
+        + '                                    <div class="row">\n'
+        + '                                        <input type="hidden" value="' + data['menu_code'] + '">\n'
+        + '                                        <div class="col-6"><button class="btn btn-light btn-modify" type="button" data-toggle="modal" data-target="#myModal">수정</button></div>\n'
+        + '                                        <div class="col-6"><button class="btn btn-light" type="button">삭제</button></div>\n'
+        + '                                    </div>\n'
+        + '                                </div>\n'
+        + '                            </div>\n'
+        + '                        </div>\n'
+        + '                    </div>'
+    return template;
+  }
+</script>
+</body>
+
+</html>

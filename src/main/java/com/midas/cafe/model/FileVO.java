@@ -7,9 +7,8 @@ import lombok.Setter;
 @Setter
 public class FileVO {
 
-  private int fileNo;
-  private String fileName;
-  private String fileOriName;
-  private String imageUrl;
+  private int fno;
+  private String filename;
+  private String url;
 
 }

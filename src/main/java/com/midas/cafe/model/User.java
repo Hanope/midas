@@ -19,5 +19,4 @@ public class User {
   private String birthday;
   private int groupCode;
 
-
 }
