@@ -1,7 +1,12 @@
 package com.midas.cafe.service;
 
+import com.midas.cafe.common.StrUtil;
 import com.midas.cafe.model.User;
+import com.midas.cafe.model.UserReservation;
+import com.midas.cafe.repository.menu.MenuDao;
 import com.midas.cafe.repository.user.UserDao;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +16,44 @@ import org.springframework.stereotype.Service;
  * Time: 오후 4:01
  */
 @Service
-public class UserService {
+public class UserService
+{
+	@Autowired
+	private UserDao userDao;
 
-    @Autowired
-    UserDao userDao;
+	public int joinUser(User user){
+		return userDao.insertUser(user);
+	}
 
-    public int joinUser(User user){
-        return userDao.insertUser(user);
-    }
+	public void cancelReservation(UserReservation reservation)
+	{
+		userDao.updateUserCancel(reservation);
+	}
 
     public String selectPwById(String id){ return userDao.selectPwById(id); }
 
     public User selectUserById(String id){ return userDao.selectUserById(id); }
 
     public int updateUserInfo(User user){return userDao.updateUser(user);}
+	public List<UserReservation> getAllReservation(String loginID)
+	{
+		return userDao.selectReservation(loginID);
+	}
 
+	public void addReservation(String loginID, String reserveDt, String description, List<String> detail)
+	{
+		userDao.insertReservation(loginID, reserveDt, description);
+		Integer reservIdx = userDao.getLastInsertID();
+		for(String str : detail)
+		{
+			List<String> list = StrUtil.splitToList(str, ":");
+			String code = list.get(0);
+			String amount = list.get(1);
+			userDao.insertReservationDetail(reservIdx, code, amount);
+		}
+	}
+
+	public List<Map<String, Object>> findAllUser() {
+		return userDao.findAllUser();
+	}
 }
