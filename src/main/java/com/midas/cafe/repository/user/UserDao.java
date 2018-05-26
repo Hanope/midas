@@ -1,5 +1,6 @@
 package com.midas.cafe.repository.user;
 
+import com.midas.cafe.common.Crypt;
 import com.midas.cafe.model.Reservation;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
@@ -28,12 +29,13 @@ public class UserDao
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public int insertUser(User user){
+	public int insertUser(User user) throws Exception
+	{
 		String sql="INSERT INTO mi_user (loginid,pwd,name,email,mobile,create_dt,birth,group_code)" +
 				"VALUES(?,?,?,?,?,?,?,?, )";
 		System.out.println("유저:"+user.getName());
-		return jdbcTemplate.update(sql,user.getId(),user.getPassword(),user.getName(),
-				user.getEmail(),user.getPhone(),new Date(),user.getBirthday(),user.getGroupCode());
+		return jdbcTemplate.update(sql, user.getId(), Crypt.encrypt(user.getPassword()), user.getName(),
+		                           user.getEmail(), user.getPhone(), new Date(), user.getBirthday(), user.getGroupCode());
 	}
 
 	public String selectPwById(String id){
@@ -68,10 +70,11 @@ public class UserDao
 		return user;
 	}
 
-	public int updateUser(User user){
+	public int updateUser(User user) throws Exception
+	{
 		String sql="UPDATE mi_user SET name = ?, pwd = ?, mobile = ?," +
 				"email = ?, birth = ?  WHERE loginid = ? ";
-		int result=jdbcTemplate.update(sql, user.getName(), user.getPassword(),
+		int result=jdbcTemplate.update(sql, user.getName(), Crypt.encrypt(user.getPassword()),
 				user.getPhone(),user.getEmail(),user.getBirthday(),user.getId());
 		return result;
 	}

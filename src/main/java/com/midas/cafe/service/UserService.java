@@ -24,7 +24,8 @@ public class UserService
 	@Autowired
 	private UserDao userDao;
 
-	public int joinUser(User user){
+	public int joinUser(User user) throws Exception
+	{
 		return userDao.insertUser(user);
 	}
 
@@ -54,7 +55,8 @@ public class UserService
 	    return msg;
     }
 
-    public int updateUserInfo(User user){return userDao.updateUser(user);}
+    public int updateUserInfo(User user) throws Exception
+    {return userDao.updateUser(user);}
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);
