@@ -21,7 +21,7 @@ public class ReservationAPI
 	private UserService userService;
 
 	@GetMapping("/reservation/{reservationcode}")
-	public Result findAllReservationDetail(@PathVariable String reservationCode){
-		return userService.getAllReservationDetail(reservationCode);
+	public Result findAllReservationDetail(@PathVariable String reservationcode){
+		return userService.getAllReservationDetail(reservationcode);
 	}
 }
