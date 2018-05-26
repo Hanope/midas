@@ -1,6 +1,7 @@
 package com.midas.cafe.repository.user;
 
 import com.midas.cafe.model.Reservation;
+import com.midas.cafe.model.SearchCriteria;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.model.enumelem.ReservationStatus;
@@ -76,10 +77,38 @@ public class UserDao
 		return result;
 	}
 
-	public List<UserReservation> selectReservation(String loginID)
-	{
+	public List<UserReservation> selectReservation(String loginID) {
 		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  ORDER BY create_dt DESC";
-		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, loginID);
+		List<UserReservation> reservationList = new ArrayList<>();
+		for (Map<String, Object> map : list) {
+			UserReservation reservation = new UserReservation(map);
+			String subSql = "select idx, code, menucode, amount from mi_rsr_detail where code = ?";
+			List<Map<String, Object>> subList = jdbcTemplate.queryForList(subSql, reservation.getCode());
+			for (Map<String, Object> subMap : subList) {
+				Reservation res = new Reservation(subMap);
+				reservation.addReservation(res);
+			}
+			reservationList.add(reservation);
+		}
+		return reservationList;
+	}
+
+	public List<Map<String,Object>> selectReservationDetail(String reserveCode)
+	{
+		String sql = "select c.name category_name, b.name cafe_name, b.price, a.amount from mi_rsr_detail a, mi_cafe_menu b, mi_category c where a.menucode = b.code and b.category_code = c.code and a.code = ?";
+		return jdbcTemplate.queryForList(sql, reserveCode);
+	}
+
+	public List<UserReservation> selectReservationMon(String loginID, SearchCriteria cri)
+	{
+		String month=cri.getMonth();
+		int nextMonth=Integer.parseInt(month)+1;
+		String year=cri.getYear();
+		String start=cri.getYear()+"-"+cri.getMonth()+"-"+"01";
+		String end=cri.getYear()+"-"+nextMonth+"-"+"01";
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ? and create_dt between  ? and ? ORDER BY create_dt DESC";
+		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID,start,end);
 		List<UserReservation> reservationList = new ArrayList<>();
 		for(Map<String,Object> map : list)
 		{
@@ -94,12 +123,6 @@ public class UserDao
 			reservationList.add(reservation);
 		}
 		return reservationList;
-	}
-
-	public List<Map<String,Object>> selectReservationDetail(String reserveCode)
-	{
-		String sql = "select c.name category_name, b.name cafe_name, b.price, a.amount from mi_rsr_detail a, mi_cafe_menu b, mi_category c where a.menucode = b.code and b.category_code = c.code and a.code = ?";
-		return jdbcTemplate.queryForList(sql, reserveCode);
 	}
 
 	public int insertReservation(String loginID, String reserveDate, String description)
@@ -129,5 +152,11 @@ public class UserDao
 	public List<Map<String, Object>> findAllUser() {
 		String query = "SELECT u.loginid as id, u.name, u.mobile, u.email, u.create_dt, u.birth,  g.name as depart  FROM MI_USER as u INNER JOIN mi_group g ON group_code = g.code";
 		return jdbcTemplate.queryForList(query);
+	}
+
+	public List<Map<String,Object>> selectPurchaseList(String id)
+	{
+		String sql = "select * from mi_rsr where loginid = ?";
+		return jdbcTemplate.queryForList(sql, id);
 	}
 }

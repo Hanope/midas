@@ -18,59 +18,74 @@
                 <div class="tab-content">
                     <div class="tab-pane active" role="tabpanel" id="tab-2">
                         <h1>주문내역</h1>
+                        <div class="btn-group">
+                            <select class="form-control filtering">
+                                <option id="2018" value="/user/myReserve?year=2018&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2018</option>
+                                <option id="2017" value="/user/myReserve?year=2017&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2017</option>
+                                <option id="2016" value="/user/myReserve?year=2016&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2016</option>
+                                <option id="2015" value="/user/myReserve?year=2015&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2015</option>
+                                <option id="2014" value="/user/myReserve?year=2014&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2014</option>
+                                <option id="2013" value="/user/myReserve?year=2013&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2013</option>
+                                <option id="2012" value="/user/myReserve?year=2012&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2012</option>
+                                <option id="2011" value="/user/myReserve?year=2011&month={{#cri.month}}{{cri.month}}{{/cri.month}}">2011</option>
+                            </select>
+                        </div>
+                        <div class="btn-group">
+                            <select class="form-control filtering" id="mon">
+
+                            </select>
+                        </div>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>상품명</th>
+                                    <th>주문코드</th>
                                     <th>예약일</th>
-                                    <th>가격</th>
-                                    <th>쿠폰코드</th>
+                                    <th>주문일</th>
                                     <th>주문상태</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {{#list}}
                                 <tr>
-                                    <td>아메리카노</td>
-                                    <td>2018-05-26</td>
-                                    <td>5000원</td>
-                                    <td>0ABC342</td>
-                                    <td>대기</td>
+                                    <td>{{code}}</td>
+                                    <td>{{reserveDt}}</td>
+                                    <td>{{createDt}}</td>
+                                    <td>{{status.label}}</td>
                                 </tr>
-                                <tr>
-                                    <td>카페라떼</td>
-                                    <td>2018-05-26</td>
-                                    <td>6000원</td>
-                                    <td>0ABC342</td>
-                                    <td>수령완료</td>
-                                </tr>
+                                {{/list}}
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <nav class="d-flex justify-content-center">
-                                    <ul class="pagination">
-                                        <li class="page-item"><a class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                        <li class="page-item"><a class="page-link">1</a></li>
-                                        <li class="page-item"><a class="page-link">2</a></li>
-                                        <li class="page-item"><a class="page-link">3</a></li>
-                                        <li class="page-item"><a class="page-link">4</a></li>
-                                        <li class="page-item"><a class="page-link">5</a></li>
-                                        <li class="page-item"><a class="page-link" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                                    </ul>
-                                </nav>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
 </main>
 {{ > /user/include/footer}}
+<script>
+$(document).ready(function(e){
+    $(".filtering").on("change", function() { // (데이터 유지한채 새로고침)
+        window.location.href = $(this).val()
+    });
+    var month="{{cri.month}}";
+    var monthNum=parseInt(month);
+    var year="{{cri.year}}";
+    var yearNum=parseInt(year);
+    var mm="";
+    var date=new Date();
+    mm=date.getMonth()+1;
+    for(var i=mm;i>0;i--){
+        $("#mon").append(
+        "<option id='"+i+"' value='/user/myReserve?year={{#cri.year}}{{cri.year}}{{/cri.year}}&month="+i+"'>"+i+"월</option>"
+        )
+    }
+    $("#"+month).prop("selected",true);
+    $("#"+year).prop("selected",true);
 
+})
+</script>
 </body>
 
 </html>

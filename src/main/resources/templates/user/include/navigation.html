@@ -5,8 +5,9 @@
       <ul class="nav navbar-nav ml-auto">
         <li class="nav-item" role="presentation"><a class="nav-link" href="/user/reservation">주문하러가기</a></li>
         {{#login}}
-        <li class="nav-item" role="presentation"><p class="nav-link">{{login.name}}</p></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="/user/myPage">{{login.name}}</a></li>
         <li class="nav-item" role="presentation"><a class="nav-link" href="/user/myReserve">주문내역</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="/user/logout">로그아웃</a></li>
         {{/login}}
         {{^login}}
         <li class="nav-item" role="presentation"><a class="nav-link" href="/user/login">로그인</a></li>
