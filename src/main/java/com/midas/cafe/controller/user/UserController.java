@@ -4,6 +4,7 @@ import com.midas.cafe.common.DateUtil;
 import com.midas.cafe.common.StrUtil;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
+import com.midas.cafe.service.DeptService;
 import com.midas.cafe.service.MenuService;
 import com.midas.cafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class UserController
 	private UserService userService;
 	@Autowired
 	private MenuService menuService;
+	@Autowired
+	private DeptService deptService;
 
 	@GetMapping("/login")
 	public String loginGet()
@@ -40,7 +43,7 @@ public class UserController
 	public ModelAndView joinGet() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/user/joinForm");
-
+		modelAndView.addObject("depts", deptService.findAllDept());
 		return modelAndView;
 	}
 
@@ -55,6 +58,7 @@ public class UserController
 		}
 		catch (Exception e)
 		{
+			throw new RuntimeException(e);
 		}
 		return "/index";
 	}
