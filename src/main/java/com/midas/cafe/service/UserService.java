@@ -29,9 +29,9 @@ public class UserService
 		return userDao.insertUser(user);
 	}
 
-	public void cancelReservation(UserReservation reservation)
+	public void cancelReservation(String code)
 	{
-		userDao.updateUserCancel(reservation);
+		userDao.updateUserCancel(code);
 	}
 
     public String selectPwById(String id){ return userDao.selectPwById(id); }

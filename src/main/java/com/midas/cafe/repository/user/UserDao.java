@@ -134,10 +134,10 @@ public class UserDao
 		return jdbcTemplate.queryForList(sql, ReservationStatus.READY.getCode(),loginID);
 	}
 
-	public int updateUserCancel(UserReservation reservation)
+	public int updateUserCancel(String code)
 	{
 		String sql = "UPDATE mi_rsr SET status = ?, usr_cancel_rs = ? WHERE code = ? ";
-		return jdbcTemplate.update(sql, reservation.getStatus().getCode(), reservation.getUserCancelDesc());
+		return jdbcTemplate.update(sql, ReservationStatus.USER_CANCEL.getCode(), "", code);
 	}
 
 	public List<Map<String, Object>> findAllUser() {
