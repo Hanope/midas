@@ -3,21 +3,18 @@ package com.midas.cafe.controller.user;
 import com.midas.cafe.common.Crypt;
 import com.midas.cafe.common.DateUtil;
 import com.midas.cafe.common.StrUtil;
-import com.midas.cafe.model.LoginVO;
-import com.midas.cafe.model.User;
-import com.midas.cafe.model.UserReservation;
+import com.midas.cafe.model.*;
 import com.midas.cafe.service.DeptService;
 import com.midas.cafe.service.MenuService;
 import com.midas.cafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,7 +54,7 @@ public class UserController
 				session.setAttribute("login",login);
 			}else{
 				model.addAttribute("loginFailMsg",Boolean.TRUE);
-				return "redirect:/";
+				return "/user/loginForm";
 			}
 		}catch(Exception e){
 			throw new RuntimeException(e);
@@ -82,7 +79,6 @@ public class UserController
 	public String joinPost(User user)
 	{
 		user.setRegDate(DateUtil.currentTimestamp());//등록날짜
-		System.out.println(user.toString());
 		try
 		{
 			userService.joinUser(user);
@@ -125,11 +121,21 @@ public class UserController
 	}
 
 	@GetMapping("/myReserve")
-	public ModelAndView myReserveGet(){
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/user/myReserve");
-
-		return modelAndView;
+	public String myReserveGet(@ModelAttribute("cri") SearchCriteria cri, Model model, HttpSession session){
+		LoginVO user=(LoginVO)session.getAttribute("login");
+		String id=user.getId();
+		if(cri.getMonth()==null){
+			String tmpMon=new SimpleDateFormat("MM").format(new Date());
+			cri.setMonth(tmpMon);
+		}
+		if(cri.getYear()==null){
+			String tmpYear=new SimpleDateFormat("yyyy").format(new Date());
+			cri.setYear(tmpYear);
+		}
+		List<UserReservation> list = userService.getAllReservationMon(user.getId(),cri);
+		model.addAttribute("list", list);
+		model.addAttribute("cri",cri);
+		return "/user/myReserve";
 	}
 
 	@PostMapping("/myReserve")

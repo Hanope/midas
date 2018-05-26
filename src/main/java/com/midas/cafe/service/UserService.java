@@ -3,6 +3,7 @@ package com.midas.cafe.service;
 import com.midas.cafe.common.StrUtil;
 import com.midas.cafe.model.LoginVO;
 import com.midas.cafe.model.Result;
+import com.midas.cafe.model.SearchCriteria;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.menu.MenuDao;
@@ -104,5 +105,12 @@ public class UserService
 
 	public Result getNotification(LoginVO user) {
 		return new Result(true, userDao.findNotification(user.getId()));
+	}
+
+	public List<Map<String,Object>> selectAllPurchase(String id){return userDao.selectPurchaseList(id);}
+
+	public List<UserReservation> getAllReservationMon(String loginID, SearchCriteria cri)
+	{
+		return userDao.selectReservationMon(loginID,cri);
 	}
 }

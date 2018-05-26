@@ -2,6 +2,7 @@ package com.midas.cafe.repository.user;
 
 import com.midas.cafe.common.Crypt;
 import com.midas.cafe.model.Reservation;
+import com.midas.cafe.model.SearchCriteria;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.model.enumelem.ReservationStatus;
@@ -105,6 +106,31 @@ public class UserDao
 		return jdbcTemplate.queryForList(sql, reserveCode);
 	}
 
+	public List<UserReservation> selectReservationMon(String loginID, SearchCriteria cri)
+	{
+		String month=cri.getMonth();
+		int nextMonth=Integer.parseInt(month)+1;
+		String year=cri.getYear();
+		String start=cri.getYear()+"-"+cri.getMonth()+"-"+"01";
+		String end=cri.getYear()+"-"+nextMonth+"-"+"01";
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ? and create_dt between  ? and ? ORDER BY create_dt DESC";
+		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID,start,end);
+		List<UserReservation> reservationList = new ArrayList<>();
+		for(Map<String,Object> map : list)
+		{
+			UserReservation reservation = new UserReservation(map);
+			String subSql = "select idx, code, menucode, amount from mi_rsr_detail where code = ?";
+			List<Map<String,Object>> subList = jdbcTemplate.queryForList(subSql, reservation.getCode());
+			for (Map<String,Object> subMap : subList)
+			{
+				Reservation res = new Reservation(subMap);
+				reservation.addReservation(res);
+			}
+			reservationList.add(reservation);
+		}
+		return reservationList;
+	}
+
 	public int insertReservation(String loginID, String reserveDate, String description)
 	{
 		String sql = "INSERT INTO mi_rsr (loginid, create_dt, reserve_dt, status, description) VALUES (?,now(),str_to_date(?,'%Y-%m-%d'),?,?)";
@@ -188,5 +214,11 @@ public class UserDao
 			query = "UPDATE mi_user SET name = ?, pwd = ?, mobile = ?, email = ?, group_code = ? WHERE loginid = ?";
 			return jdbcTemplate.update(query, user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), user.getGroupCode(), user.getId());
 		}
+	}
+
+	public List<Map<String,Object>> selectPurchaseList(String id)
+	{
+		String sql = "select * from mi_rsr where loginid = ?";
+		return jdbcTemplate.queryForList(sql, id);
 	}
 }
