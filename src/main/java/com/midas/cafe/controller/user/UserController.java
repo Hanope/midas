@@ -172,9 +172,9 @@ public class UserController
 	}
 
 	@PostMapping("/reservation/cancel")
-	public String cancelReservation(UserReservation reservation)
+	public String cancelReservation(@RequestParam String code)
 	{
-		userService.cancelReservation(reservation);
-		return "/user/reservation_list";
+		userService.cancelReservation(code);
+		return "redirect:/user/reservation";
 	}
 }

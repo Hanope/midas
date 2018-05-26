@@ -130,14 +130,24 @@ public class UserDao
 				"where a.status = ? and a.loginid = ?\n" +
 				"  and a.code = b.code\n" +
 				"  and b.menucode = c.code\n" +
-				"  and c.category_code = d.code ";
+				"  and c.category_code = d.code " +
+				"  and a.code NOT IN (SELECT rsr_code FROM mi_notify_log WHERE confirm ='1')";
 		return jdbcTemplate.queryForList(sql, ReservationStatus.READY.getCode(),loginID);
 	}
 
-	public int updateUserCancel(UserReservation reservation)
+	public int updateUserCancel(String code)
 	{
 		String sql = "UPDATE mi_rsr SET status = ?, usr_cancel_rs = ? WHERE code = ? ";
-		return jdbcTemplate.update(sql, reservation.getStatus().getCode(), reservation.getUserCancelDesc());
+		return jdbcTemplate.update(sql, ReservationStatus.USER_CANCEL.getCode(), "", code);
+	}
+
+	public int notifyOff(String loginID)
+	{
+		String sql = "update mi_notify_log set confirm = '1' where rsr_code IN (\n" +
+				"  select code\n" +
+				"  from mi_rsr\n" +
+				"  where loginid = ?)";
+		return jdbcTemplate.update(sql, loginID);
 	}
 
 	public List<Map<String, Object>> findAllUser() {

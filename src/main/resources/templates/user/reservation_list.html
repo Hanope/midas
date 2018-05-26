@@ -59,7 +59,8 @@
                             <!--<td>{{adminCancelDesc}}</td>-->
                             <!--<td>{{userCancelDesc}}</td>-->
                             <td>
-                              <a class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="doDetail('{{code}}')">상세</a>
+                              <a class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="doDetail('{{code}}')">상세</a><br/>
+                              <a class="btn btn-danger" data-toggle="modal" onclick="doDel('{{code}}')">X</a>
                             </td>
                           </tr>
                           {{/list}}
@@ -85,6 +86,20 @@
                     window.location.href = '/user/reservation/add';
                 }
             };
+        function doDel(code)
+        {
+            var $form = $('<form></form>');
+            $form.attr('action', '/user/reservation/cancel');
+            $form.attr('method', 'post');
+            $form.appendTo('body');
+
+            var code = $('<input type="hidden" value="' + code + '" name="code">');
+
+            $form.append(code);
+            $form.submit();
+
+        }
+
         function  doDetail(code)
         {
             $.ajax({
@@ -127,8 +142,8 @@
                 <table class="table table-striped table-bordered table-list">
                     <thead>
                     <tr>
-                        <th>품목명</th>
-                        <th>구분</th>
+                        <th>카테고리</th>
+                        <th>품명</th>
                         <th>가격</th>
                         <th>수량</th>
                     </tr>

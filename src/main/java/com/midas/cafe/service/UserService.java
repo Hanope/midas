@@ -30,9 +30,9 @@ public class UserService
 		return userDao.insertUser(user);
 	}
 
-	public void cancelReservation(UserReservation reservation)
+	public void cancelReservation(String code)
 	{
-		userDao.updateUserCancel(reservation);
+		userDao.updateUserCancel(code);
 	}
 
     public String selectPwById(String id){ return userDao.selectPwById(id); }
@@ -58,6 +58,11 @@ public class UserService
 
     public int updateUserInfo(User user) throws Exception
     {return userDao.updateUser(user);}
+
+    public Result notifyOff(String loginID)
+    {
+	    return new Result(true, userDao.notifyOff(loginID));
+    }
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);
