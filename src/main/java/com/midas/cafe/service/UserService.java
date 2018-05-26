@@ -31,6 +31,11 @@ public class UserService
 		userDao.updateUserCancel(reservation);
 	}
 
+    public String selectPwById(String id){ return userDao.selectPwById(id); }
+
+    public User selectUserById(String id){ return userDao.selectUserById(id); }
+
+    public int updateUserInfo(User user){return userDao.updateUser(user);}
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);

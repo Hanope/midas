@@ -94,18 +94,15 @@
                     }
                     else
                     {
-                        alert(data);
-                        // $('#select-category option').remove();
-                        // for (var i = 0; i < data.length; i++)
-                        // {
-                        //     var option = '<option value="' + data[i]['code'] + '">' + data[i]['name'] + '</option>'
-                        //     $('#select-category').append(option);
-                        // }
+                        $('#detailbody').html('');
+                        for (var i = 0; i < data.length; i++)
+                        {
+                            var body = '<tr><td>' + data[i]['category_name'] + '</td><td>' + data[i]['cafe_name'] + '</td><td>' + data[i]['price'] +'</td><td>'+ data[i]['amount'] + '</td>';
+                            $('#detailbody').append(body);
+                        }
                     }
                 }
             });
-
-            alert(code);
         }
 
     </script>

@@ -2,6 +2,7 @@ package com.midas.cafe.controller.user;
 
 import com.midas.cafe.common.DateUtil;
 import com.midas.cafe.common.StrUtil;
+import com.midas.cafe.model.LoginVO;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.service.DeptService;
@@ -9,12 +10,13 @@ import com.midas.cafe.service.MenuService;
 import com.midas.cafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -58,10 +60,50 @@ public class UserController
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException(e);
 		}
 		return "/index";
 	}
+
+	@GetMapping("/logout")
+	public String logout(HttpSession session){
+		if(session!=null)
+			session.invalidate();
+		return "redirect:/";
+	}
+
+	@GetMapping("/myPage")
+	public String myPageGet(Model model, HttpSession session){
+		LoginVO login=(LoginVO)session.getAttribute("login");
+		User user=userService.selectUserById(login.getId());
+		user.setBirthday(user.getBirthday().substring(0,10));
+		model.addAttribute("user",user);
+		return "/user/myPage";
+	}
+
+	@PostMapping("/myPage")
+	public String myPagePost(User user,Model model, HttpSession session){
+		LoginVO login=(LoginVO)session.getAttribute("login");
+		String id=login.getId();
+		user.setId(id);
+		try{
+			userService.updateUserInfo(user);
+			model.addAttribute("changeSuccessMsg",Boolean.TRUE);
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+
+		return "/user/myPage";
+	}
+
+	@GetMapping("/myReserve")
+	public String myReserveGet(){return "/user/myReserve";}
+
+	@PostMapping("/myReserve")
+	public String myReservePost(User user){
+
+		return "/user/myReserve";
+	}
+
 
 	@GetMapping("/reservation")
 	public ModelAndView reservationView(@RequestParam String loginID)
