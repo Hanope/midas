@@ -1,5 +1,6 @@
 package com.midas.cafe.common;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,6 +19,11 @@ public class DateUtil
 	public static String format(String format, Date date)
 	{
 		return date != null ? (new SimpleDateFormat(format)).format(date) : "";
+	}
+
+	public static Timestamp currentTimestamp()
+	{
+		return new Timestamp(System.currentTimeMillis());
 	}
 
 }

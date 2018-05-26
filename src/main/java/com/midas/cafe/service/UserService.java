@@ -1,5 +1,6 @@
 package com.midas.cafe.service;
 
+import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.menu.MenuDao;
 import com.midas.cafe.repository.user.UserDao;

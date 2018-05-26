@@ -1,12 +1,20 @@
 package com.midas.cafe.controller.user;
 
+import com.midas.cafe.common.DateUtil;
+import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
+import com.midas.cafe.repository.user.UserDao;
 import com.midas.cafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.sql.Date;
+import java.util.List;
 
 /**
  * User: kimkm
@@ -18,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController
 {
 	@Autowired
-	private UserDao userDao;
-	@Autowired
 	private UserService userService;
 
 	@GetMapping("/login")
@@ -30,7 +36,7 @@ public class UserController
 
 	@PostMapping("/join")
 	public String joinPost(User user){
-		user.setRegDate(new Date());//등록날짜
+		user.setRegDate(DateUtil.currentTimestamp());//등록날짜
 		System.out.println(user.toString());
 		try{
 			userService.joinUser(user);
@@ -38,8 +44,6 @@ public class UserController
 		}
 		return "/index";
 	}
-
-
 
 	@GetMapping("/reservation")
 	public ModelAndView reservationView(@RequestParam String loginID)
