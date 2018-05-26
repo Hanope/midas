@@ -13,7 +13,6 @@ public class AdminDao {
 
   public int insert(CafeMenu menu) {
     String query = "INSERT INTO mi_cafe_menu(code, name, price, category_code, img_src) VALUES(?, ?, ?, ?, ?)";
-
     return jdbcTemplate.update(query, menu.getCode(), menu.getName(), menu.getPrice(), menu.getCategoryCode(), menu.getImgSrc());
   }
 }

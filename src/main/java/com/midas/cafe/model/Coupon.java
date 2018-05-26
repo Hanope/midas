@@ -12,6 +12,7 @@ public class Coupon {
   private String name;
   private Date startDate;
   private Date endDate;
+  private Date usedDate;
   private String categoryCode;
   private int discountPercent;
 
