@@ -33,11 +33,13 @@
         </nav>
     </div>
     <div class="register-photo">
-        <div class="form-container" style="margin:47px;">
+        <button class="btn btn-sm btn-primary btn-create" type="button" onclick="page.goList()" style="margin-left: 120px">목록으로</button>
+        <div class="form-container" style="margin-left:120px;margin-top: 30px">
             <form method="post">
                 <h2 class="text-center"><strong>예약등록</strong></h2>
-                <div class="form-group"><label>예약일시</label><input class="form-control" placeholder="예약일시" type="text" id="datepicker"></div>
-        <div class="form-group"><button class="btn btn-primary btn-block" type="submit" style="background-color:rgb(71,119,244);">등록하기</button></div>
+            <div class="form-group"><label>예약일시</label><input class="form-control" placeholder="예약일시" type="text" id="datepicker"></div>
+            <div class="form-group"><button class="btn btn-secondary btn-sm">메뉴추가</button></div>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit" style="background-color:rgb(71,119,244);">등록하기</button></div>
         </form>
     </div>
     </div>
@@ -53,6 +55,12 @@
                 }
             );
         });
+        var page =
+            {
+                goList: function () {
+                    window.location.href = '/user/reservation';
+                }
+            };
     </script>
 
 </body>
