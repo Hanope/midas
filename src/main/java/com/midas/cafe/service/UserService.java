@@ -47,10 +47,10 @@ public class UserService
 			    msg += ",";
 		    String name = (String) map.get("cafe_name");
 		    String amount = map.get("amount") + "";
-		    msg += (name + " " + amount + "건");
+		    msg += (name + " " + amount + "개");
 	    }
 	    if(msg.length() != 0)
-		    msg += " 이 준비완료 되었습니다.";
+		    msg += " 가 준비완료 되었습니다.";
 	    return msg;
     }
 
