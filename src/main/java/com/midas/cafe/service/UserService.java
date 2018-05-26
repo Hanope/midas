@@ -80,6 +80,10 @@ public class UserService
 		}
 	}
 
+	public List<Map<String, Object>> findAllUsersCoupon(String userId) {
+		return userDao.findAllUsersCoupon(userId);
+	}
+
 	public List<Map<String, Object>> findAllUser() {
 		return userDao.findAllUser();
 	}
