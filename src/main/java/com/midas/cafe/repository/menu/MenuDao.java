@@ -46,8 +46,8 @@ public class MenuDao {
   }
 
   public void updateMenu(CafeMenu menu) {
-    String query = "UPDATE mi_cafe_menu SET name = ?, price = ?, category_code = ? WHERE code=?";
-    jdbcTemplate.update(query, menu.getName(), menu.getPrice(), menu.getCategoryCode(), menu.getCode());
+    String query = "UPDATE mi_cafe_menu SET name = ?, price = ?, img_src = ? WHERE code=?";
+    jdbcTemplate.update(query, menu.getName(), menu.getPrice(), menu.getImgNo(), menu.getCode());
   }
 
   public void deleteByNo(int no) {

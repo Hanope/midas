@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/admin/category")
+@RequestMapping("/api")
 public class CategoryAPI {
 
   @Autowired
   private CategoryService categoryService;
 
-  @GetMapping()
+  @GetMapping("/category")
   public Result findAllCategories() {
     return categoryService.findAllCategories();
   }
 
-  @PostMapping("/{name}")
+  @PostMapping("/admin/category/{name}")
   public Result add(@PathVariable("name") String name) {
     return categoryService.addCategory(name);
   }
