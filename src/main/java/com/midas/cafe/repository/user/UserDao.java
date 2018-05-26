@@ -23,7 +23,7 @@ public class UserDao
 
 	public List<UserReservation> selectReservation(String loginID)
 	{
-		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where login_id = ?  ";
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  ORDER BY create_dt DESC";
 		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
 		List<UserReservation> reservationList = new ArrayList<>();
 		for(Map<String,Object> map : list)

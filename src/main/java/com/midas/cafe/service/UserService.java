@@ -1,10 +1,13 @@
 package com.midas.cafe.service;
 
+import com.midas.cafe.model.Result;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.menu.MenuDao;
 import com.midas.cafe.repository.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * User: kimkm
@@ -16,6 +19,11 @@ public class UserService
 {
 	@Autowired
 	private UserDao userDao;
+
+	public List<UserReservation> getAllReservation(String loginID)
+	{
+		return userDao.selectReservation(loginID);
+	}
 
 	public void addReservation(UserReservation reservation)
 	{

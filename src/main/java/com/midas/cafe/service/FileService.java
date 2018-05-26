@@ -34,5 +34,6 @@ public class FileService {
 
     destinationFile.getParentFile().mkdirs();
     file.transferTo(destinationFile);
+    return "";
   }
 }

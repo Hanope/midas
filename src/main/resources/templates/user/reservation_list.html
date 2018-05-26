@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDAS</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table-1.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="/assets/css/Registration-Form-with-Photo.css">
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean">
+            <div class="container"><a class="navbar-brand" href="#">MIDAS user</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse"
+                    id="navcol-1">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">회원관리</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">메뉴관리</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">예약관리</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col col-xs-6">
+                    <h3 class="panel-title">예약목록 조회</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <table class="table table-striped table-bordered table-list">
+                  <thead>
+                    <tr>
+                        <th><em class="fa fa-cog"></em></th>
+                        <th>요청일시</th>
+                        <th>예약일시</th>
+                        <th>상태</th>
+                        <th>옵션</th>
+                        <th>처리완료일시</th>
+                        <th>취소사유(관리자)</th>
+                        <th>취소사유(사용자)</th>
+                        <th></th>
+                    </tr> 
+                  </thead>
+                  <tbody>
+                          {{#list}}
+                          <tr>
+                            <td align="center">
+                                <input type="checkbox" class="check-box"></a>
+                            </td>
+                            <td>{{createDt}}</td>
+                            <td>{{reserveDt}}</td>
+                            <th>{{status.label}}</th>
+                            <th>{{description}}</th>
+                            <th>{{endDtStr}}</th>
+                            <th>{{adminCancelDesc}}</th>
+                            <th>{{userCancelDesc}}</th>
+                            <td>
+                              <a class="btn btn-info">상세</a></td>
+                          </tr>
+                          {{/list}}
+                    </tbody>
+                </table>
+            
+              </div>
+              <div class="panel-footer">
+                <div class="row">
+                </div>
+              </div>
+            </div>
+
+</div></div></div>
+    </div>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/theme.js"></script>
+</body>
+
+</html>
