@@ -37,9 +37,11 @@ public class UserController
 	}
 
 	@GetMapping("/join")
-	public String joinGet()
-	{
-		return "/user/joinForm";
+	public ModelAndView joinGet() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/user/joinForm");
+
+		return modelAndView;
 	}
 
 	@PostMapping("/join")
