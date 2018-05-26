@@ -32,8 +32,12 @@ public class MenuService {
   }
 
   public CafeMenu updateMenu(CafeMenu menu, MultipartFile file) {
-    System.out.println(file);
+    int fileIdx = fileService.addFile(file);
+
+    if (!file.isEmpty())
+      menu.setImgNo(fileIdx);
     menuDao.updateMenu(menu);
+
     return menu;
   }
 

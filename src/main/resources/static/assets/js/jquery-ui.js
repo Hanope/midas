@@ -4979,7 +4979,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 		this._on( {
 
 			// Prevent focus from sticking to links inside menu after clicking
-			// them (focus should always stay on UL during navigation).
+			// them (focus should always stay on UL during include).
 			"mousedown .ui-menu-item": function( event ) {
 				event.preventDefault();
 			},
@@ -6883,7 +6883,7 @@ $.widget( "ui.button", {
 						event.preventDefault();
 
 						// Support: PhantomJS <= 1.9, IE 8 Only
-						// If a native click is available use it so we actually cause navigation
+						// If a native click is available use it so we actually cause include
 						// otherwise just trigger a click event
 						if ( this.element[ 0 ].click ) {
 							this.element[ 0 ].click();
