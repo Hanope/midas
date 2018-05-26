@@ -1,9 +1,12 @@
 package com.midas.cafe.controller.user;
 
+import com.midas.cafe.common.DateUtil;
+import com.midas.cafe.common.StrUtil;
 import com.midas.cafe.model.LoginVO;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.user.UserDao;
+import com.midas.cafe.service.MenuService;
 import com.midas.cafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: kimkm
