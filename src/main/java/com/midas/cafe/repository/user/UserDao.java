@@ -1,6 +1,8 @@
 package com.midas.cafe.repository.user;
 
+import com.midas.cafe.common.Crypt;
 import com.midas.cafe.model.Reservation;
+import com.midas.cafe.model.SearchCriteria;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.model.enumelem.ReservationStatus;
