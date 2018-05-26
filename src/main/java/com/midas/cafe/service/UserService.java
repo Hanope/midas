@@ -1,6 +1,7 @@
 package com.midas.cafe.service;
 
 import com.midas.cafe.common.StrUtil;
+import com.midas.cafe.model.Result;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.menu.MenuDao;
@@ -33,6 +34,11 @@ public class UserService
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);
+	}
+
+	public Result getAllReservationDetail(String reservationCode) {
+		List<Map<String,Object>> list = userDao.selectReservationDetail(reservationCode);
+		return new Result(true, list);
 	}
 
 	public void addReservation(String loginID, String reserveDt, String description, List<String> detail)

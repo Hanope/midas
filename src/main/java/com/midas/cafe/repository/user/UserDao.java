@@ -51,6 +51,12 @@ public class UserDao
 		return reservationList;
 	}
 
+	public List<Map<String,Object>> selectReservationDetail(String reserveCode)
+	{
+		String sql = "select c.name category_name, b.name cafe_name, b.price, a.amount from mi_rsr_detail a, mi_cafe_menu b, mi_category c where a.menucode = b.code and b.category_code = c.code and a.code = ?";
+		return jdbcTemplate.queryForList(sql, reserveCode);
+	}
+
 	public int insertReservation(String loginID, String reserveDate, String description)
 	{
 		String sql = "INSERT INTO mi_rsr (loginid, create_dt, reserve_dt, status, description) VALUES (?,now(),str_to_date(?,'%Y-%m-%d'),?,?)";
