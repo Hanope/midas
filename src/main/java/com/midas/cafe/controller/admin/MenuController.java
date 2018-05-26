@@ -28,7 +28,7 @@ public class MenuController {
     List<Map<String, Object>> categories = categoryDao.findAllCategories();
 
     modelAndView.addObject("categories", categories);
-    modelAndView.setViewName("/admin/cafe_menu");
+    modelAndView.setViewName("/admin/adminRegMenuForm");
     return modelAndView;
   }
 
@@ -40,6 +40,6 @@ public class MenuController {
   @PostMapping()
   public String addMenu(CafeMenu menu) {
     menuDao.addMenu(menu);
-    return "/admin/adminMenuManage";
+    return "redirect:/admin/menu";
   }
 }
