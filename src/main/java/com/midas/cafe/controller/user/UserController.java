@@ -53,6 +53,8 @@ public class UserController
 				login.setName(userInfo.getName());
 				login.setRole(userInfo.getRole());
 				session.setAttribute("login",login);
+				String notiMsg = userService.getCompleteReserveOrderNotifyMessage(login.getId());
+				session.setAttribute("notify", notiMsg.equals("") ? null : notiMsg);
 			}else{
 				model.addAttribute("loginFailMsg",Boolean.TRUE);
 				return "redirect:/";

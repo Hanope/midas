@@ -78,7 +78,7 @@ public class UserDao
 
 	public List<UserReservation> selectReservation(String loginID)
 	{
-		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  ORDER BY create_dt DESC";
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  AND status IN('0','1','2') ORDER BY create_dt DESC";
 		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
 		List<UserReservation> reservationList = new ArrayList<>();
 		for(Map<String,Object> map : list)
@@ -118,6 +118,17 @@ public class UserDao
 	{
 		String sql = "SELECT LAST_INSERT_ID()";
 		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+
+	public List<Map<String,Object>> getCompleteReserveOrder(String loginID)
+	{
+		String sql = "select d.name category_name, c.name cafe_name, c.price, b.amount\n" +
+				"  from mi_rsr a, mi_rsr_detail b, mi_cafe_menu c, mi_category d\n" +
+				"where a.status = ? and a.loginid = ?\n" +
+				"  and a.code = b.code\n" +
+				"  and b.menucode = c.code\n" +
+				"  and c.category_code = d.code ";
+		return jdbcTemplate.queryForList(sql, ReservationStatus.READY.getCode(),loginID);
 	}
 
 	public int updateUserCancel(UserReservation reservation)
