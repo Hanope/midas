@@ -203,6 +203,7 @@
             "endDate": $('#endDate').val()
           }),
           success: function(response) {
+            console.log(String(response['message']));
             console.log(response['message']);
           }
         });
