@@ -6,6 +6,7 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationHome;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +26,9 @@ public class FileService {
     String fileNameExtension = FilenameUtils.getExtension(fileName).toLowerCase();
     File destinationFile;
     String destinationFileName;
-    String realFileUrl = "/Users/heemanghan/Desktop/midas/cafe/src/main/resources/static/img/";
+    ApplicationHome home = new ApplicationHome(this.getClass());
+    File dir = home.getDir();
+    String realFileUrl = dir.getPath() + "/static/img/";
     try {
       do {
         destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + fileNameExtension;

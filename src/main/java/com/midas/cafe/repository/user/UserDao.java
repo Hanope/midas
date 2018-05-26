@@ -130,4 +130,17 @@ public class UserDao
 		String query = "SELECT u.loginid as id, u.name, u.mobile, u.email, u.create_dt, u.birth,  g.name as depart  FROM MI_USER as u INNER JOIN mi_group g ON group_code = g.code";
 		return jdbcTemplate.queryForList(query);
 	}
+
+	public List<Map<String, Object>> findAllUsersCoupon(String userId) {
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT muc.loginid, muc.coupon_code, muc.issued_dt, mc.name,");
+		query.append(" mc.start_date, mc.end_date, mc.discount_per, m.name as menu_name");
+		query.append(" FROM midas2.mi_user_coupon as muc");
+		query.append(" INNER JOIN mi_coupon as mc");
+		query.append(" ON coupon_code = mc.code");
+		query.append(" INNER JOIN mi_category m");
+		query.append(" ON mc.category_code = m.code");
+
+		return jdbcTemplate.queryForList(query.toString());
+	}
 }
