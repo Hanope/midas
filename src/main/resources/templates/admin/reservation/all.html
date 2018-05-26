@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {{ > /admin/include/header}}
+</head>
+
+<body>
+{{ > /admin/include/navigation}}
+
+<main class="page projects-page">
+  <table class="table user-table">
+    <thead>
+    <tr>
+      <th>번호</th>
+      <th>회원</th>
+      <th>신청일</th>
+      <th>수령일</th>
+      <th>상태</th>
+      <th>요청사항</th>
+      <th>메뉴</th>
+      <th>수량</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#reservation}}
+    <tr>
+      <td>{{code}}</td>
+      <td>{{loginid}}</td>
+      <td>{{create_dt}}</td>
+      <td>{{reserve_dt}}</td>
+      <td>{{status_name}}</td>
+      <td>{{description}}</td>
+      <td>{{name}}</td>
+      <td>{{amount}}</td>
+    </tr>
+    {{/reservation}}
+    </tbody>
+  </table>
+</main>
+
+  {{ > /admin/include/footer }}
+
+<script>
+  var reservNo;
+  var reservStatus;
+
+  $('.btn-process').click(function() {
+    reservNo = $($($(this)).parent().siblings('td')[0]).text();
+    reservStatus = $($($(this)).siblings('input')).val();
+    $('#btn-cng-' + reservStatus).parent().toggle();
+  });
+
+  $('.btn-change').click(function() {
+    $.ajax({
+      url: '/api/admin/reservation/' + reservNo,
+      method: 'put',
+      data: {
+        "reservStatus" : $(this).data('code')
+      },
+      success: function(response) {
+        alert(response['message']);
+        console.log(response);
+        location.reload();
+      }
+    });
+  });
+
+  $('#processModal').on('hidden.bs.modal', function () {
+    $('#btn-cng-' + reservStatus).parent().toggle();
+  });
+</script>
+</body>
+
+</html>

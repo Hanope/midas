@@ -1,7 +1,6 @@
 package com.midas.cafe.repository.user;
 
 import com.midas.cafe.model.Reservation;
-import com.midas.cafe.model.SearchCriteria;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.model.enumelem.ReservationStatus;
@@ -29,12 +28,13 @@ public class UserDao
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public int insertUser(User user){
+	public int insertUser(User user) throws Exception
+	{
 		String sql="INSERT INTO mi_user (loginid,pwd,name,email,mobile,create_dt,birth,group_code)" +
 				"VALUES(?,?,?,?,?,?,?,?, )";
 		System.out.println("유저:"+user.getName());
-		return jdbcTemplate.update(sql,user.getId(),user.getPassword(),user.getName(),
-				user.getEmail(),user.getPhone(),new Date(),user.getBirthday(),user.getGroupCode());
+		return jdbcTemplate.update(sql, user.getId(), Crypt.encrypt(user.getPassword()), user.getName(),
+		                           user.getEmail(), user.getPhone(), new Date(), user.getBirthday(), user.getGroupCode());
 	}
 
 	public String selectPwById(String id){
@@ -69,23 +69,27 @@ public class UserDao
 		return user;
 	}
 
-	public int updateUser(User user){
+	public int updateUser(User user) throws Exception
+	{
 		String sql="UPDATE mi_user SET name = ?, pwd = ?, mobile = ?," +
 				"email = ?, birth = ?  WHERE loginid = ? ";
-		int result=jdbcTemplate.update(sql, user.getName(), user.getPassword(),
+		int result=jdbcTemplate.update(sql, user.getName(), Crypt.encrypt(user.getPassword()),
 				user.getPhone(),user.getEmail(),user.getBirthday(),user.getId());
 		return result;
 	}
 
-	public List<UserReservation> selectReservation(String loginID) {
-		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  ORDER BY create_dt DESC";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, loginID);
+	public List<UserReservation> selectReservation(String loginID)
+	{
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  AND status IN('0','1','2') ORDER BY create_dt DESC";
+		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
 		List<UserReservation> reservationList = new ArrayList<>();
-		for (Map<String, Object> map : list) {
+		for(Map<String,Object> map : list)
+		{
 			UserReservation reservation = new UserReservation(map);
 			String subSql = "select idx, code, menucode, amount from mi_rsr_detail where code = ?";
-			List<Map<String, Object>> subList = jdbcTemplate.queryForList(subSql, reservation.getCode());
-			for (Map<String, Object> subMap : subList) {
+			List<Map<String,Object>> subList = jdbcTemplate.queryForList(subSql, reservation.getCode());
+			for (Map<String,Object> subMap : subList)
+			{
 				Reservation res = new Reservation(subMap);
 				reservation.addReservation(res);
 			}
@@ -143,15 +147,71 @@ public class UserDao
 		return jdbcTemplate.queryForObject(sql, Integer.class);
 	}
 
-	public int updateUserCancel(UserReservation reservation)
+	public List<Map<String,Object>> getCompleteReserveOrder(String loginID)
+	{
+		String sql = "select d.name category_name, c.name cafe_name, c.price, b.amount\n" +
+				"  from mi_rsr a, mi_rsr_detail b, mi_cafe_menu c, mi_category d\n" +
+				"where a.status = ? and a.loginid = ?\n" +
+				"  and a.code = b.code\n" +
+				"  and b.menucode = c.code\n" +
+				"  and c.category_code = d.code " +
+				"  and a.code NOT IN (SELECT rsr_code FROM mi_notify_log WHERE confirm ='1')";
+		return jdbcTemplate.queryForList(sql, ReservationStatus.READY.getCode(),loginID);
+	}
+
+	public int updateUserCancel(String code)
 	{
 		String sql = "UPDATE mi_rsr SET status = ?, usr_cancel_rs = ? WHERE code = ? ";
-		return jdbcTemplate.update(sql, reservation.getStatus().getCode(), reservation.getUserCancelDesc());
+		return jdbcTemplate.update(sql, ReservationStatus.USER_CANCEL.getCode(), "", code);
+	}
+
+	public int notifyOff(String loginID)
+	{
+		String sql = "update mi_notify_log set confirm = '1' where rsr_code IN (\n" +
+				"  select code\n" +
+				"  from mi_rsr\n" +
+				"  where loginid = ?)";
+		return jdbcTemplate.update(sql, loginID);
 	}
 
 	public List<Map<String, Object>> findAllUser() {
 		String query = "SELECT u.loginid as id, u.name, u.mobile, u.email, u.create_dt, u.birth,  g.name as depart  FROM MI_USER as u INNER JOIN mi_group g ON group_code = g.code";
 		return jdbcTemplate.queryForList(query);
+	}
+
+	public List<Map<String, Object>> findAllUsersCoupon(String userId) {
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT muc.loginid, muc.coupon_code, muc.issued_dt, mc.name,");
+		query.append(" mc.start_date, mc.end_date, mc.discount_per, m.name as menu_name");
+		query.append(" FROM midas2.mi_user_coupon as muc");
+		query.append(" INNER JOIN mi_coupon as mc");
+		query.append(" ON coupon_code = mc.code");
+		query.append(" INNER JOIN mi_category m");
+		query.append(" ON mc.category_code = m.code");
+
+		return jdbcTemplate.queryForList(query.toString());
+	}
+
+	public int delete(String userId) {
+		String query = "DELETE FROM mi_user WHERE loginid = ?";
+		return jdbcTemplate.update(query, userId);
+	}
+
+	public List<Map<String, Object>> findNotification(String id) {
+//		todo 기능구현
+		return null;
+	}
+
+	public int updateUser2(User user) {
+		String query = "";
+
+		if (user.getPassword() == null) {
+			query = "UPDATE mi_user SET name = ?, mobile = ?, email = ?, group_code = ? WHERE loginid = ?";
+			return jdbcTemplate.update(query, user.getName(), user.getPhone(), user.getEmail(), user.getGroupCode(), user.getId());
+		} else {
+			query = "UPDATE mi_user SET name = ?, pwd = ?, mobile = ?, email = ?, group_code = ? WHERE loginid = ?";
+			return jdbcTemplate.update(query, user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), user.getGroupCode(), user.getId());
+		}
 	}
 
 	public List<Map<String,Object>> selectPurchaseList(String id)

@@ -38,18 +38,14 @@
                             <div class="row">
                                 <div class="col-12">
                                     <p class="product-description">{{category_name}}</p>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <p class="product-price">{{price}}원</p>
-                                        </div>
-                                    </div>
+                                    <div class="row"><div class="col-12"><p class="product-price">{{price}}원</p></div></div>
                                     <div class="row">
                                         <input type="hidden" name="code" value="{{menu_code}}">
-                                        <div class="col-6 sum-data" data-attr="{{price}}"><input type="number" min="0" name="amount" class="form-control allSum" placeholder="수량"></div>
+                                        <div class="col-6"><input type="number" name="amount" class="form-control" placeholder="수량"></div>
                                     </div>
                                 </div>
                             </div>
-                            <label>주문하기</label><input type="checkbox" class="checkSum"  name="image[]" value=""/>
+                            <label>주문하기</label><input type="checkbox" name="image[]" value=""/>
                         </div>
                     </div>
                     {{/menus}}
@@ -82,13 +78,13 @@
         //   $checkbox.prop("checked",!$checkbox.prop("checked"))
         //   e.preventDefault();
         // });
-        /*$(function () {
+        $(document).ready(function () {
             $("#datepicker").datepicker(
                 {
                     dateFormat: 'yy-mm-dd'
                 }
             );
-        });*/
+        });
 
         $('#btn-menu-search').click(function() {
         var menuName = $('#text-menu').val();
@@ -144,7 +140,7 @@
             + '                                    <div class="row"><div class="col-12"><p class="product-price">' + data['price'] + '원</p></div></div>\n'
             + '                                    <div class="row">\n'
             + '                                        <input type="hidden" name="code" value="' + data['menu_code'] + '">\n'
-            + '                                        <div class="col-6 "<input type="number" name="amount" class="form-control " placeholder="수량"></div>'
+            + '                                        <div class="col-6"<input type="number" name="amount" class="form-control" placeholder="수량"></div>'
             + '                                    </div>\n'
             + '                                </div>\n'
             + '                            </div>\n'
@@ -152,32 +148,6 @@
             + '                    </div>'
         return template;
       }
-      var sum=0;
-      $('#sumIs').text(0);
-      $(document).on('click','.allSum',function(){
-          sum=0;
-          $('.product-item').each(function(index,item){
-              if ($(this).find('input:checkbox[name="image[]"]').is(":checked")){
-                  var cnt=$(this).find('.allSum').val();
-                  var price=$(this).find('.sum-data').attr('data-attr');
-                  sum+=(cnt*price);
-              }
-              $('#sumIs').text(sum);
-          })
-      })
-        $(document).on('click','.checkSum',function(){
-            sum=0;
-            $('.product-item').each(function(index,item){
-                if ($(this).find('input:checkbox[name="image[]"]').is(":checked")){
-                    var cnt=$(this).find('.allSum').val();
-                    var price=$(this).find('.sum-data').attr('data-attr');
-                    sum+=(cnt*price);
-                }
-                $('#sumIs').text(sum);
-            })
-        })
-
-
       function doSave()
       {
           var saveStr = "";

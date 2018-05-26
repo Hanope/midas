@@ -1,6 +1,7 @@
 package com.midas.cafe.service;
 
 import com.midas.cafe.common.StrUtil;
+import com.midas.cafe.model.LoginVO;
 import com.midas.cafe.model.Result;
 import com.midas.cafe.model.SearchCriteria;
 import com.midas.cafe.model.User;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sun.applet.resources.MsgAppletViewer;
 
 /**
  * User: kimkm
@@ -23,23 +26,51 @@ public class UserService
 	@Autowired
 	private UserDao userDao;
 
-	public int joinUser(User user){
+	public int joinUser(User user) throws Exception
+	{
 		return userDao.insertUser(user);
 	}
 
-	public void cancelReservation(UserReservation reservation)
+	public void cancelReservation(String code)
 	{
-		userDao.updateUserCancel(reservation);
+		userDao.updateUserCancel(code);
 	}
 
     public String selectPwById(String id){ return userDao.selectPwById(id); }
 
     public User selectUserById(String id){ return userDao.selectUserById(id); }
 
-    public int updateUserInfo(User user){return userDao.updateUser(user);}
+    public String getCompleteReserveOrderNotifyMessage(String loginID)
+    {
+	    List<Map<String,Object>> list = userDao.getCompleteReserveOrder(loginID);
+	    String msg = "";
+	    for (Map<String,Object> map : list)
+	    {
+	    	if(msg.length() != 0)
+			    msg += ",";
+		    String name = (String) map.get("cafe_name");
+		    String amount = map.get("amount") + "";
+		    msg += (name + " " + amount + "개");
+	    }
+	    if(msg.length() != 0)
+		    msg += " 가 준비완료 되었습니다.";
+	    return msg;
+    }
+
+    public int updateUserInfo(User user) throws Exception
+    {return userDao.updateUser(user);}
+
+    public Result notifyOff(String loginID)
+    {
+	    return new Result(true, userDao.notifyOff(loginID));
+    }
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);
+	}
+
+	public int updateUser(User user) {
+		return userDao.updateUser2(user);
 	}
 
 	public Result getAllReservationDetail(String reservationCode) {
@@ -60,8 +91,20 @@ public class UserService
 		}
 	}
 
+	public List<Map<String, Object>> findAllUsersCoupon(String userId) {
+		return userDao.findAllUsersCoupon(userId);
+	}
+
 	public List<Map<String, Object>> findAllUser() {
 		return userDao.findAllUser();
+	}
+
+	public int delete(String userId) {
+		return userDao.delete(userId);
+	}
+
+	public Result getNotification(LoginVO user) {
+		return new Result(true, userDao.findNotification(user.getId()));
 	}
 
 	public List<Map<String,Object>> selectAllPurchase(String id){return userDao.selectPurchaseList(id);}

@@ -1,10 +1,10 @@
 package com.midas.cafe.model.enumelem;
 
 public enum ReservationStatus {
-    REQUEST("예약요청","0"),
-    CHECK("주문접수","1"),
-    READY("상품준비완료","2"),
-    COMPLETE("판매완료","3"),
+    REQUEST("접수완료","0"),
+    CHECK("제조중","1"),
+    READY("제조완료","2"),
+    COMPLETE("거래완료","3"),
     ADMIN_CANCEL("관리자취소", "4"),
     USER_CANCEL("사용자취소","5")
     ;
