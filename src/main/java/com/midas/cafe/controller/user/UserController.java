@@ -41,6 +41,33 @@ public class UserController
 		return "/user/loginForm";
 	}
 
+	@PostMapping("/login")
+	public String loginPost(Model model, LoginVO login, HttpSession session){
+		String id=login.getId();
+		try{
+			String pwd = userService.selectPwById(id);
+
+			if(pwd != null && login.getPassword().equals(pwd)){
+				User userInfo= userService.selectUserById(id);
+				login.setId(userInfo.getId());//세션에 로그인정보 할당
+				login.setName(userInfo.getName());
+				login.setRole(userInfo.getRole());
+				session.setAttribute("login",login);
+			}else{
+				model.addAttribute("loginFailMsg",Boolean.TRUE);
+				return "redirect:/";
+			}
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+		String dest=(String)session.getAttribute("dest");//접근페이지로이동
+		if(dest!=null){
+
+			return "redirect:"+dest;
+		}
+		return "redirect:/";
+	}
+
 	@GetMapping("/join")
 	public ModelAndView joinGet() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -96,7 +123,12 @@ public class UserController
 	}
 
 	@GetMapping("/myReserve")
-	public String myReserveGet(){return "/user/myReserve";}
+	public ModelAndView myReserveGet(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/user/myReserve");
+
+		return modelAndView;
+	}
 
 	@PostMapping("/myReserve")
 	public String myReservePost(User user){
@@ -106,11 +138,11 @@ public class UserController
 
 
 	@GetMapping("/reservation")
-	public ModelAndView reservationView(@RequestParam String loginID)
+	public ModelAndView reservationView(HttpSession session)
 	{
-		// todo : loginID 세션에서 빼오는 걸로 수정
+		LoginVO user = (LoginVO)session.getAttribute("login");
 		ModelAndView modelAndView = new ModelAndView();
-		List<UserReservation> list = userService.getAllReservation(loginID);
+		List<UserReservation> list = userService.getAllReservation(user.getId());
 
 		modelAndView.addObject("list", list);
 		modelAndView.setViewName("/user/reservation_list");
@@ -118,8 +150,8 @@ public class UserController
 	}
 
 	@GetMapping("/reservation/add")
-	public ModelAndView reservationAddView()
-	{// todo : loginID 세션에서 빼오는 걸로 수정
+	public ModelAndView reservationAddView(HttpSession session)
+	{
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("menus", menuService.findAllMenu());
 		modelAndView.setViewName("/user/reservation_add");
@@ -127,20 +159,13 @@ public class UserController
 	}
 
 	@PostMapping("/reservation/add")
-	public String reservationAdd(@RequestParam String reservedt, @RequestParam String str, @RequestParam String note)
+	public String reservationAdd(HttpSession session, @RequestParam String reservedt, @RequestParam String str, @RequestParam String note)
 	{
-		String loginID = "admin"; // todo : 추후 세션에서 가져오도록 수정
+		LoginVO user = (LoginVO)session.getAttribute("login");
 		List<String> list = StrUtil.splitToList(str, ",");
-		userService.addReservation(loginID, reservedt, note, list);
+		userService.addReservation(user.getId(), reservedt, note, list);
 		return "redirect:/user/reservation";
 	}
-
-//	@PostMapping("/reservation")
-//	public String addReservation(UserReservation reservation)
-//	{
-//		userService.addReservation(reservation);
-//		return "/user/reservation_list";
-//	}
 
 	@PostMapping("/reservation/cancel")
 	public String cancelReservation(UserReservation reservation)

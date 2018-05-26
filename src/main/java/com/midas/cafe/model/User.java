@@ -17,6 +17,7 @@ public class User {
   private String email;
   private Date regDate;
   private String birthday;
-  private String groupCode;
+  private int groupCode;
+  private String role;
 
 }

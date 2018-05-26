@@ -49,13 +49,13 @@ public class UserService
 	public void addReservation(String loginID, String reserveDt, String description, List<String> detail)
 	{
 		userDao.insertReservation(loginID, reserveDt, description);
-		Integer reservIdx = userDao.getLastInsertID();
+		Integer reserveIdx = userDao.getLastInsertID();
 		for(String str : detail)
 		{
 			List<String> list = StrUtil.splitToList(str, ":");
 			String code = list.get(0);
 			String amount = list.get(1);
-			userDao.insertReservationDetail(reservIdx, code, amount);
+			userDao.insertReservationDetail(reserveIdx, code, amount);
 		}
 	}
 

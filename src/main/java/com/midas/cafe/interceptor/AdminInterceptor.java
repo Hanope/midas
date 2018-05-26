@@ -14,7 +14,9 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         HttpSession session = request.getSession();
-        if (session.getAttribute("login") == null) { // login세션이 없으면
+        LoginVO user = (LoginVO)session.getAttribute("login");
+
+        if (user == null || !user.getRole().equals("ADMIN")) { // login세션이 없으면
             saveDest(request); // URI값 가져오기
             response.sendRedirect("/user/login");
             session.setAttribute("temp", "temp");

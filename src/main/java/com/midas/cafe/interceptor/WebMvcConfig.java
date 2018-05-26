@@ -20,11 +20,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/user/*")
-                .excludePathPatterns("/user/login");
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/user/join");
 
         registry.addInterceptor(adminInterceptor)
-                .addPathPatterns("/admin/*")
-                .addPathPatterns("/api/admin/*");
+                .addPathPatterns("/admin/**")
+                .addPathPatterns("/api/admin/**");
     }
 }

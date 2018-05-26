@@ -5,6 +5,7 @@ import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.model.enumelem.ReservationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -29,18 +30,21 @@ public class UserDao
 
 	public int insertUser(User user){
 		String sql="INSERT INTO mi_user (loginid,pwd,name,email,mobile,create_dt,birth,group_code)" +
-				"VALUES(?,?,?,?,?,?,?,?)";
+				"VALUES(?,?,?,?,?,?,?,?, )";
 		System.out.println("유저:"+user.getName());
 		return jdbcTemplate.update(sql,user.getId(),user.getPassword(),user.getName(),
 				user.getEmail(),user.getPhone(),new Date(),user.getBirthday(),user.getGroupCode());
 	}
 
 	public String selectPwById(String id){
-		String sql="select pwd from mi_user where loginid = ?";
-		String pwd=jdbcTemplate.queryForObject(sql,new Object[]{id},String.class);
+		String sql = "select pwd from mi_user where loginid = ?";
+		String pwd = null;
+		try {
+			pwd = jdbcTemplate.queryForObject(sql, new Object[]{id}, String.class);
+		} catch (EmptyResultDataAccessException e) { }
+
 		return pwd;
 	}
-
 
 	public User selectUserById(String id){
 		String sql="select * from mi_user where loginid = ?";
@@ -54,9 +58,10 @@ public class UserDao
 				tmp.setName((rs.getString("name")));
 				tmp.setBirthday(rs.getString("birth"));
 				tmp.setEmail(rs.getString("email"));
-				tmp.setRegDate(rs.getString("create_dt"));
+				tmp.setRegDate(rs.getDate("create_dt"));
 				tmp.setPhone(rs.getString("mobile"));
 				tmp.setGroupCode(rs.getInt("group_code"));
+				tmp.setRole(rs.getString("role"));
 				return tmp;
 			}
 				});
