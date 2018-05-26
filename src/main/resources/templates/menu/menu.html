@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDAS</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.min.css">
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean">
+            <div class="container"><a class="navbar-brand" href="#">MIDAS admin</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse"
+                    id="navcol-1">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">회원관리</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">메뉴관리</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">예약관리</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <main class="page projects-page">
+        <section class="portfolio-block projects-cards">
+            <div class="container">
+                <div class="heading">
+                    <h2>주문접수</h2>
+                </div>
+                <form class="search-form">
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div><input class="form-control" type="text" id="text-menu" placeholder="I am looking for..">
+                        <div class="input-group-append"><button class="btn btn-light" id="btn-menu-search" type="button">Search </button></div>
+                    </div>
+                </form>
+                <div class="row product-list">
+                    {{#menus}}
+                    <div class="col-sm-6 col-md-4 product-item">
+                        <div class="product-container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="#" class="product-image">
+                                        <img src="{{#file_url}}{{file_url}}{{/file_url}}{{^file_url}}/img/default.png{{/file_url}}">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h2><a href="#">{{menu_name}}</a></h2>
+                                </div>
+                                <div class="col-4"><a href="#" class="small-text">게시중</a></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p class="product-description">{{category_name}}</p>
+                                    <div class="row"><div class="col-12"><p class="product-price">{{price}}원</p></div></div>
+                                    <div class="row">
+                                        <input type="hidden" value="{{menu_code}}">
+                                        <div class="col-6"><input type="number" class="form-control"></div>
+                                        <div class="col-6"><button class="btn btn-light btn-modify" type="button">담기</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/menus}}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/script.min.js"></script>
+
+    <script>
+      $('#btn-menu-search').click(function() {
+        var menuName = $('#text-menu').val();
+        console.log(menuName);
+        $.ajax({
+          url: '/api/admin/menus/' + menuName,
+          dataType: 'json',
+          success: function(response) {
+            var result = response['result'];
+            var data = response['message'];
+
+            if (!result) {
+              alert(data);
+              return;
+            } else {
+              $('.product-item').remove();
+              for (var i = 0; i < data.length; i++) {
+                $('.product-list').append(viewMenus(data[i]));
+              }
+            }
+          }
+        });
+      });
+
+      $(document).on('click', '#btn-modify', function() {
+        var name = $('#modified-name').val();
+        var price = $('#modified-price').val();
+
+        console.log(name);
+        console.log(price);
+      });
+
+      function viewMenus(data) {
+        var img_url = data['file_url'] == null ? '/img/default.png' : data['file_url'];
+        var template = '<div class="col-sm-6 col-md-4 product-item">\n'
+            + '                        <div class="product-container">\n'
+            + '                            <div class="row">\n'
+            + '                                <div class="col-md-12">\n'
+            + '                                    <a href="#" class="product-image">\n'
+            + '                                        <img src="' + img_url +'">\n'
+            + '                                    </a>\n'
+            + '                                </div>\n'
+            + '                            </div>\n'
+            + '                            <div class="row">\n'
+            + '                                <div class="col-8">\n'
+            + '                                    <h2><a href="#">' + data['menu_name'] + '</a></h2>\n'
+            + '                                </div>\n'
+            + '                                <div class="col-4"><a href="#" class="small-text">게시중</a></div>\n'
+            + '                            </div>\n'
+            + '                            <div class="row">\n'
+            + '                                <div class="col-12">\n'
+            + '                                    <p class="product-description">' + data['category_name'] + '</p>\n'
+            + '                                    <div class="row"><div class="col-12"><p class="product-price">' + data['price'] + '원</p></div></div>\n'
+            + '                                    <div class="row">\n'
+            + '                                        <input type="hidden" value="' + data['menu_code'] + '">\n'
+            + '                                        <div class="col-6"<input type="number" class="form-control"></div>'
+            + '                                        <div class="col-6"><button class="btn btn-light btn-modify" type="button">담기</button></div>\n'
+            + '                                    </div>\n'
+            + '                                </div>\n'
+            + '                            </div>\n'
+            + '                        </div>\n'
+            + '                    </div>'
+        return template;
+      }
+
+    </script>
+</body>
+
+</html>

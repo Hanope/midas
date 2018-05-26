@@ -17,5 +17,4 @@ public class User {
   private Date birthday;
   private String groupCode;
 
-
 }

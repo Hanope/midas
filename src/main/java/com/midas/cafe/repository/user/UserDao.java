@@ -52,4 +52,9 @@ public class UserDao
 		String sql = "UPDATE mi_rsr SET status = ?, usr_cancel_rs = ? WHERE code = ? ";
 		return jdbcTemplate.update(sql, reservation.getStatus().getCode(), reservation.getUserCancelDesc());
 	}
+
+	public List<Map<String, Object>> findAllUser() {
+		String query = "SELECT u.loginid as id, u.name, u.mobile, u.email, u.create_dt, u.birth,  g.name as depart  FROM MI_USER as u INNER JOIN mi_group g ON group_code = g.code";
+		return jdbcTemplate.queryForList(query);
+	}
 }

@@ -3,6 +3,8 @@ package com.midas.cafe.service;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.menu.MenuDao;
 import com.midas.cafe.repository.user.UserDao;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +27,9 @@ public class UserService
 	public void cancelReservation(UserReservation reservation)
 	{
 		userDao.updateUserCancel(reservation);
+	}
+
+	public List<Map<String, Object>> findAllUser() {
+		return userDao.findAllUser();
 	}
 }

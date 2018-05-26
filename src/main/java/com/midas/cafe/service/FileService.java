@@ -15,24 +15,33 @@ public class FileService {
   @Autowired
   private FileDao fileDao;
 
-  public String addFile(MultipartFile file) throws Exception {
-    FileVO fileVO = new FileVO();
+  public int addFile(MultipartFile file) {
+    int fileIdx = -1;
 
     if (file.isEmpty())
-      return null;
+      return fileIdx;
 
     String fileName = file.getOriginalFilename();
     String fileNameExtension = FilenameUtils.getExtension(fileName).toLowerCase();
     File destinationFile;
     String destinationFileName;
-    String fileUrl = "/Users/heemanghan/Desktop/midas/cafe/src/main/resources/static/img/";
+    String realFileUrl = "/Users/heemanghan/Desktop/midas/cafe/src/main/resources/static/img/";
+    try {
+      do {
+        destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + fileNameExtension;
+        destinationFile = new File(realFileUrl + destinationFileName);
+      } while (destinationFile.exists());
 
-    do {
-      destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + fileNameExtension;
-      destinationFile = new File(fileUrl + destinationFileName);
-    } while (destinationFile.exists());
+      FileVO fileVO = new FileVO();
+      fileVO.setFilename(fileName);
+      fileVO.setUrl("/img/" + destinationFileName);
+      destinationFile.getParentFile().mkdirs();
+      file.transferTo(destinationFile);
+      fileIdx = fileDao.addNewFile(fileVO);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-    destinationFile.getParentFile().mkdirs();
-    file.transferTo(destinationFile);
+    return fileIdx;
   }
 }
