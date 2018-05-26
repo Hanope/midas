@@ -20,5 +20,10 @@ public class UserService {
         return userDao.insertUser(user);
     }
 
+    public String selectPwById(String id){ return userDao.selectPwById(id); }
+
+    public User selectUserById(String id){ return userDao.selectUserById(id); }
+
+    public int updateUserInfo(User user){return userDao.updateUser(user);}
 
 }

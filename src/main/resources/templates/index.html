@@ -18,12 +18,18 @@
 
 <body>
 <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
-  <div class="container"><a class="navbar-brand logo" href="#">MCAFE</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+  <div class="container"><a class="navbar-brand logo" href="/">MCAFE</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse"
          id="navbarNav">
       <ul class="nav navbar-nav ml-auto">
         <li class="nav-item" role="presentation"><a class="nav-link" href="cv.html">주문하러가기</a></li>
-        <li class="nav-item" role="presentation"><a class="nav-link" href="hire-me.html">로그인</a></li>
+        {{^login}}
+        <li class="nav-item" role="presentation"><a class="nav-link" href="/user/login">로그인</a></li>
+        {{/login}}
+        {{#login}}
+        <li class="nav-item" role="presentation"><a class="nav-link" href="/user/myPage">{{login.name}}</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="/user/logout">로그아웃</a></li>
+        {{/login}}
       </ul>
     </div>
   </div>
@@ -40,9 +46,9 @@
   <section class="portfolio-block photography">
     <div class="container">
       <div class="row no-gutters">
-        <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="#"><img class="img-fluid image" src="assets/img/nature/image5.jpg"></a></div>
-        <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="#"><img class="img-fluid image" src="assets/img/nature/image2.jpg"></a></div>
-        <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="#"><img class="img-fluid image" src="assets/img/tech/image4.jpg"></a></div>
+        <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="#"><img class="img-fluid image" src="/assets/img/nature/image5.jpg"></a></div>
+        <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="#"><img class="img-fluid image" src="/assets/img/nature/image2.jpg"></a></div>
+        <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="#"><img class="img-fluid image" src="/assets/img/tech/image4.jpg"></a></div>
       </div>
     </div>
   </section>

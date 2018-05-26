@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Brand</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table-1.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="/assets/css/Registration-Form-with-Photo.css">
+</head>
+
+<body>
+<nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
+    <div class="container"><a class="navbar-brand logo" href="/">MCAFE</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item" role="presentation"><a class="nav-link" href="cv.html">주문하러가기</a></li>
+                {{^login}}
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/user/login">로그인</a></li>
+                {{/login}}
+                {{#login}}
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/user/myPage">{{login.name}}</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/user/logout">로그아웃</a></li>
+                {{/login}}
+            </ul>
+        </div>
+    </div>
+</nav>
+<main class="page cv-page">
+    <section class="portfolio-block cv">
+        <div class="container">
+            <div>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item myTab"><a class="nav-link"  href="/user/myPage">내정보</a></li>
+                    <li class="nav-item myTab"><a class="nav-link active" href="/user/myReserve">주문내역</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="tab-2">
+                        <h1>주문내역</h1>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>상품명</th>
+                                    <th>예약일</th>
+                                    <th>가격</th>
+                                    <th>쿠폰코드</th>
+                                    <th>주문상태</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>아메리카노</td>
+                                    <td>2018-05-26</td>
+                                    <td>5000원</td>
+                                    <td>0ABC342</td>
+                                    <td>대기</td>
+                                </tr>
+                                <tr>
+                                    <td>카페라떼</td>
+                                    <td>2018-05-26</td>
+                                    <td>6000원</td>
+                                    <td>0ABC342</td>
+                                    <td>수령완료</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <nav class="d-flex justify-content-center">
+                                    <ul class="pagination">
+                                        <li class="page-item"><a class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                                        <li class="page-item"><a class="page-link">1</a></li>
+                                        <li class="page-item"><a class="page-link">2</a></li>
+                                        <li class="page-item"><a class="page-link">3</a></li>
+                                        <li class="page-item"><a class="page-link">4</a></li>
+                                        <li class="page-item"><a class="page-link">5</a></li>
+                                        <li class="page-item"><a class="page-link" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+<footer class="page-footer">
+    <div class="container">
+        <div class="links"><a href="#">About me</a><a href="#">Contact me</a><a href="#">Projects</a></div>
+        <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a></div>
+    </div>
+</footer>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/theme.js"></script>
+<script>
+    $('.myTab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+
+</script>
+</body>
+
+</html>

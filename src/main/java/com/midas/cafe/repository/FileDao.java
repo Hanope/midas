@@ -11,7 +11,7 @@ public class FileDao {
   private JdbcTemplate jdbcTemplate;
 
   public void addNewFile() {
-    String query = ""
+    String query = "";
   }
 
 }

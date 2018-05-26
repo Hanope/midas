@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Brand</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table-1.css">
+    <link rel="stylesheet" href="/assets/css/MUSA_panel-table.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="/assets/css/Registration-Form-with-Photo.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
+        <div class="container"><a class="navbar-brand logo" href="/">MCAFE</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navbarNav">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="cv.html">주문하러가기</a></li>
+                    {{^login}}
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="/user/login">로그인</a></li>
+                    {{/login}}
+                    {{#login}}
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="/user/myPage">{{login.name}}</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="/user/logout">로그아웃</a></li>
+                    {{/login}}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="page cv-page">
+        <section class="portfolio-block cv">
+            <div class="container">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item myTab"><a class="nav-link active " href="/user/myPage">내정보</a></li>
+                        <li class="nav-item myTab"><a class="nav-link" href="/user/myReserve" >주문내역</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" role="tabpanel" id="tab-1">
+                            <h1>내 정보</h1>
+                            <form action="/user/myPage" method="post">
+                                <div class="form-row">
+                                    <div class="col">
+                                            <div class="form-group"><label>ID</label>
+                                                <input class="form-control" type="text" name="id" value="{{#user.id}}{{user.id}}{{/user.id}}" readonly="">
+                                            </div>
+                                            <div class="form-group"><label>비밀번호</label>
+                                                <input class="form-control" type="password" name="password" value="{{#user.password}}{{user.password}}{{/user.password}}">
+                                            </div>
+                                            <div class="form-group"><label>이름</label>
+                                                <input class="form-control" type="text" name="name" value="{{#user.name}}{{user.name}}{{/user.name}}">
+                                            </div>
+                                            <div class="form-group"><label>이메일</label>
+                                                <input class="form-control" type="text" name="email" value="{{#user.email}}{{user.email}}{{/user.email}}">
+                                            </div>
+                                            <div class="form-group"><label>연락처</label>
+                                                <input class="form-control" type="text" name="phone" value="{{#user.phone}}{{user.phone}}{{/user.phone}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>부서</label>
+                                                <select name="groupCode" class="form-control">
+                                                    <optgroup label="This is a group">
+                                                        <option value="12" selected="">기획팀</option>
+                                                        <option value="13">개발팀</option>
+                                                        <option value="14">마케팅팀</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <div class="form-group"><label>생일</label>
+                                                <input class="form-control" type="text" name="birthday" placeholder="1993-11-29" value="{{#user.birthday}}{{user.birthday}}{{/user.birthday}}">
+                                            </div>
+                                    </div>
+                                </div><button class="btn btn-primary btn-lg" type="submit">변경</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    <footer class="page-footer">
+        <div class="container">
+            <div class="links"><a href="#">About me</a><a href="#">Contact me</a><a href="#">Projects</a></div>
+            <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a></div>
+        </div>
+    </footer>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script>
+        var successMsg=""
+        "{{#changeSuccessMsg}}"
+        successMsg="{{changeSuccessMsg}}";
+        "{{/changeSuccessMsg}}"
+        if(successMsg!="")
+            alert("회원 정보가 수정되었습니다.");
+    </script>
+</body>
+
+</html>
