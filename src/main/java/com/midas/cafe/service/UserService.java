@@ -1,6 +1,5 @@
 package com.midas.cafe.service;
 
-import com.midas.cafe.model.Result;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.menu.MenuDao;
 import com.midas.cafe.repository.user.UserDao;
@@ -20,6 +19,15 @@ public class UserService
 	@Autowired
 	private UserDao userDao;
 
+    public int joinUser(User user){
+        return userDao.insertUser(user);
+    }
+
+	public void cancelReservation(UserReservation reservation)
+	{
+		userDao.updateUserCancel(reservation);
+	}
+
 	public List<UserReservation> getAllReservation(String loginID)
 	{
 		return userDao.selectReservation(loginID);
@@ -28,10 +36,5 @@ public class UserService
 	public void addReservation(UserReservation reservation)
 	{
 		userDao.insertReservation(reservation);
-	}
-
-	public void cancelReservation(UserReservation reservation)
-	{
-		userDao.updateUserCancel(reservation);
 	}
 }

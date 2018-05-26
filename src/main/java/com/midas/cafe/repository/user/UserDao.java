@@ -1,6 +1,7 @@
 package com.midas.cafe.repository.user;
 
 import com.midas.cafe.model.Reservation;
+import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +21,14 @@ public class UserDao
 {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+	public int insertUser(User user){
+		String sql="INSERT INTO mi_user (loginid,pwd,name,email,mobile,create_dt,birth,group_code" +
+				"VALUES(?,?,?,?,?,?,?,?)";
+		return jdbcTemplate.update(sql,user.getId(),user.getPassword(),user.getName(),
+				user.getEmail(),user.getPhone(),user.getBirthday(),user.getBirthday(),user.getGroupCode());
+
+	}
 
 	public List<UserReservation> selectReservation(String loginID)
 	{
