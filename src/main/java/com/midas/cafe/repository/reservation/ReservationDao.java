@@ -47,4 +47,9 @@ public class ReservationDao {
     String query = "UPDATE mi_rsr SET status = ? WHERE code = ?";
     return jdbcTemplate.update(query, reservStatus, reservationCode);
   }
+
+  public int createNotification(int reservationCode) {
+    String query = "INSERT INTO mi_notify_log(rsr_code, confirm) VALUES(?, ?)";
+    return jdbcTemplate.update(query, reservationCode, 0);
+  }
 }

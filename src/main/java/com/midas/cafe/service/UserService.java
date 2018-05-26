@@ -1,6 +1,7 @@
 package com.midas.cafe.service;
 
 import com.midas.cafe.common.StrUtil;
+import com.midas.cafe.model.LoginVO;
 import com.midas.cafe.model.Result;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
@@ -62,6 +63,10 @@ public class UserService
 		return userDao.selectReservation(loginID);
 	}
 
+	public int updateUser(User user) {
+		return userDao.updateUser2(user);
+	}
+
 	public Result getAllReservationDetail(String reservationCode) {
 		List<Map<String,Object>> list = userDao.selectReservationDetail(reservationCode);
 		return new Result(true, list);
@@ -86,5 +91,13 @@ public class UserService
 
 	public List<Map<String, Object>> findAllUser() {
 		return userDao.findAllUser();
+	}
+
+	public int delete(String userId) {
+		return userDao.delete(userId);
+	}
+
+	public Result getNotification(LoginVO user) {
+		return new Result(true, userDao.findNotification(user.getId()));
 	}
 }

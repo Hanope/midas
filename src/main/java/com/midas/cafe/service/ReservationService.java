@@ -22,6 +22,8 @@ public class ReservationService {
   }
 
   public Result updateStatus(int reservationCode, int reservStatus) {
+    if (reservStatus == 3)
+      reservationDao.createNotification(reservationCode);
     reservationDao.updateStatus(reservationCode, reservStatus);
     return new Result(true, "상태가 변경되었습니다.");
   }

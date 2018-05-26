@@ -157,4 +157,26 @@ public class UserDao
 
 		return jdbcTemplate.queryForList(query.toString());
 	}
+
+	public int delete(String userId) {
+		String query = "DELETE FROM mi_user WHERE loginid = ?";
+		return jdbcTemplate.update(query, userId);
+	}
+
+	public List<Map<String, Object>> findNotification(String id) {
+//		todo 기능구현
+		return null;
+	}
+
+	public int updateUser2(User user) {
+		String query = "";
+
+		if (user.getPassword() == null) {
+			query = "UPDATE mi_user SET name = ?, mobile = ?, email = ?, group_code = ? WHERE loginid = ?";
+			return jdbcTemplate.update(query, user.getName(), user.getPhone(), user.getEmail(), user.getGroupCode(), user.getId());
+		} else {
+			query = "UPDATE mi_user SET name = ?, pwd = ?, mobile = ?, email = ?, group_code = ? WHERE loginid = ?";
+			return jdbcTemplate.update(query, user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), user.getGroupCode(), user.getId());
+		}
+	}
 }

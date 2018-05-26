@@ -34,6 +34,7 @@
                 <td>{{birth}}</td>
                 <td>
                     <button class="btn btn-info btn-coupon" data-toggle="modal" data-target="#couponModal" data-id="{{id}}">쿠폰발급</button>
+                  <button class="btn btn-success btn-modify" data-toggle="modal" data-target="#modifyModal" data-id="{{id}}">수정</button>
                     <button class="btn btn-danger btn-delete" data-id="{{id}}">삭제</button>
                 </td>
             </tr>
@@ -73,7 +74,36 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
+<div class="modal" id="modifyModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">회원정보 수정</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form-container">
+          <div class="form-group">
+              <div class="form-group"><label>이름</label><input type="hidden" id="text-user-id"><input type="text" class="form-control" name="name" id="text-user-name"></div>
+              <div class="form-group"><label>비밀번호</label><input type="text" class="form-control" name="password" id="text-user-password"></div>
+              <div class="form-group"><label>부서</label>
+                <select name="option-dept" id="option-dept" name="groupCode" class="form-control">
+                </select>
+              </div>
+              <div class="form-group"><label>핸드폰</label><input type="text" class="form-control" name="mobile" id="text-user-phone"></div>
+              <div class="form-group"><label>이메일</label><input type="text" class="form-control" name="email" id="text-user-email"></div>
+              <div class="form-group"><button class="btn btn-info btn-block" id="btn-modify">수정하기</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
     {{ > /admin/include/footer }}
 
@@ -97,6 +127,63 @@
                 $('#select-category').append(option);
               }
             }
+          }
+        });
+      });
+
+      $(document).on('click', '.btn-modify', function() {
+        var userId = $($(this).parent()).siblings('td')[0].innerHTML;
+        var userName = $($(this).parent()).siblings('td')[1].innerHTML;
+        var phone = $($(this).parent()).siblings('td')[3].innerHTML;
+        var email = $($(this).parent()).siblings('td')[4].innerHTML;
+
+        $('#text-user-id').val(userId);
+        $('#text-user-name').val(userName);
+        $('#text-user-phone').val(phone);
+        $('#text-user-email').val(email);
+
+        $.ajax({
+          url: '/api/dept',
+          method: 'get',
+          dataType: 'json',
+          success: function(response) {
+            var data = response['message'];
+            for (var i = 0; i < data.length; i++) {
+              var html = '<option value="' + data[i]['code'] + '">' + data[i]['name'] + '</option>';
+              $('#option-dept').append(html);
+            }
+          }
+        });
+      });
+
+      $('#btn-modify').click(function() {
+        $.ajax({
+          url: '/api/admin/user',
+          method: 'put',
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            "id": $('#text-user-id').val(),
+            "name": $('#text-user-name').val(),
+            "phone": $('#text-user-phone').val(),
+            "groupCode": $('#option-dept').val(),
+            "email": $('#text-user-email').val()
+          }),
+          success: function(response) {
+            alert(response['message']);
+            location.reload();
+          }
+        });
+      });
+
+      $(document).on('click', '.btn-delete', function() {
+        var userId = $(this).data('id');
+        $.ajax({
+          url: '/api/admin/user/' + userId,
+          dataType: 'json',
+          method: 'delete',
+          success: function(response) {
+            alert(response['message']);
           }
         });
       });
