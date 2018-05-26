@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,5 +40,13 @@ public class UserReservation
 		this.endDate = (Date) map.get("end_date");
 		this.adminCancelDesc = (String) map.get("adm_cancel_rs");
 		this.userCancelDesc = (String) map.get("usr_cancel_rs");
+	}
+
+	public void addReservation(Reservation reservation)
+	{
+		if(reservationList == null)
+			reservationList = new ArrayList<>();
+
+		reservationList.add(reservation);
 	}
 }

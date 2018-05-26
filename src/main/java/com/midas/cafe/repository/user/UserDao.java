@@ -1,6 +1,5 @@
 package com.midas.cafe.repository.user;
 
-import com.midas.cafe.model.CafeMenu;
 import com.midas.cafe.model.Reservation;
 import com.midas.cafe.model.UserReservation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,17 @@ public class UserDao
 		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
 		List<UserReservation> reservationList = new ArrayList<>();
 		for(Map<String,Object> map : list)
-			reservationList.add(new UserReservation(map));
+		{
+			UserReservation reservation = new UserReservation(map);
+			String subSql = "select idx, code, menucode, amount from mi_rsr_detail where code = ?";
+			List<Map<String,Object>> subList = jdbcTemplate.queryForList(subSql, reservation.getCode());
+			for (Map<String,Object> subMap : subList)
+			{
+				Reservation res = new Reservation(subMap);
+				reservation.addReservation(res);
+			}
+			reservationList.add(reservation);
+		}
 		return reservationList;
 	}
 

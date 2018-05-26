@@ -1,6 +1,11 @@
 package com.midas.cafe.controller.user;
 
+import com.midas.cafe.model.UserReservation;
+import com.midas.cafe.repository.user.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -12,4 +17,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController
 {
+	@Autowired
+	private UserDao userDao;
+
+	@GetMapping("/reservation")
+	public String reservationView()
+	{
+		return "/user/reservation_list";
+	}
+
+	@PostMapping("/reservation")
+	public String addReservation(UserReservation reservation)
+	{
+		userDao.insertReservation(reservation);
+		return "/user/reservation_list";
+	}
+
+	@PostMapping("/reservation/cancel")
+	public String cancelReservation(UserReservation reservation)
+	{
+		userDao.updateUserCancel(reservation);
+		return "/user/reservation_list";
+	}
 }
