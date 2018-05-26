@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDAS</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/MUSA_panel-table-1.css">
+    <link rel="stylesheet" href="assets/css/MUSA_panel-table.css">
+    <link rel="stylesheet" href="assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="assets/css/Registration-Form-with-Photo.css">
+</head>
+
+<body>
+<nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
+    <div class="container"><a class="navbar-brand logo" href="#">MCAFE</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item" role="presentation"><a class="nav-link" href="cv.html">주문하러가기</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="hire-me.html">로그인</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="register-photo">
+    <div class="form-container" style="margin:47px;">
+        <form method="post">
+            <h2 class="text-center"><strong>회원가입</strong></h2>
+            <div class="form-group"><input class="form-control" name="id" type="text" placeholder="ID"></div>
+            <div class="form-group"><input class= type="password" name="password" name="password" placeholder="Password"></div>
+
+            <div class="form-group">
+                <input class="form-control" type="text" name="name" placeholder="이름">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="email" placeholder="이메일">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="birthday" placeholder="생년월일 (1993-11-29)">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="phone" placeholder="핸드폰번호">
+            </div>
+            <label>부서</label>
+            <div class="form-group">
+                <select name="groupCode" class="form-control">
+                <optgroup label="This is a group">
+                    <option value="12" selected="">기획팀</option>
+                    <option value="13">개발팀</option>
+                    <option value="14">마케팅팀</option>
+                </optgroup>
+            </select>
+            </div>
+            <div class="form-group">
+                <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox">I agree to the license terms.</label></div>
+            </div>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit" style="background-color:rgb(71,119,244);">가입하기</button></div><a href="#" class="already">You already have an account? Login here.</a></form>
+    </div>
+</div>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/theme.js"></script>
+</body>
+
+</html>

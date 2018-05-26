@@ -1,6 +1,7 @@
 package com.midas.cafe.repository.user;
 
 import com.midas.cafe.model.Reservation;
+import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,9 +22,17 @@ public class UserDao
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	public int insertUser(User user){
+		String sql="INSERT INTO mi_user (loginid,pwd,name,email,mobile,create_dt,birth,group_code" +
+				"VALUES(?,?,?,?,?,?,?,?)";
+		return jdbcTemplate.update(sql,user.getId(),user.getPassword(),user.getName(),
+				user.getEmail(),user.getPhone(),user.getBirthday(),user.getBirthday(),user.getGroupCode());
+
+	}
+
 	public List<UserReservation> selectReservation(String loginID)
 	{
-		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where login_id = ?  ";
+		String sql = "select code, loginid, create_dt, reserve_dt, status, description, end_date, adm_cancel_rs, usr_cancel_rs from mi_rsr where loginid = ?  ORDER BY create_dt DESC";
 		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, loginID);
 		List<UserReservation> reservationList = new ArrayList<>();
 		for(Map<String,Object> map : list)
