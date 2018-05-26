@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class NotifyLog {
 
-  private String idx;
+  private int idx;
   private String userId;
   private String notificationType;
   private String target;

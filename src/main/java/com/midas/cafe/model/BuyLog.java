@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class BuyLog {
 
-  private String idx;
+  private int idx;
   private String userId;
   private Date buyDate;
   private String buyType;

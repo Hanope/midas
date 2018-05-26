@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Role {
 
-  private String code;
+  private int code;
   private String name;
   private String description;
 }

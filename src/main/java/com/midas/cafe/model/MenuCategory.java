@@ -7,7 +7,10 @@ import lombok.Setter;
 @Setter
 public class MenuCategory {
 
-  private String code;
+  private int code;
   private String name;
 
+  public MenuCategory(String name) {
+    this.name = name;
+  }
 }

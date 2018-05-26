@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class CafeMenu {
 
-  private String code;
+  private int code;
   private String name;
   private int price;
   private String categoryCode;

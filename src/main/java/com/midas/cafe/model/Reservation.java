@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Reservation {
 
-  private String idx;
+  private int idx;
   private String code;
   private String menuCode;
   private int amount;

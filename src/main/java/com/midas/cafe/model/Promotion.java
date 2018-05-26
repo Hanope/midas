@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class Promotion {
 
-  private String idx;
+  private int idx;
   private String title;
   private String body;
   private String writeUser;

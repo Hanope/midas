@@ -8,5 +8,5 @@ import lombok.Setter;
 public class UserRole {
 
   private String userId;
-  private String roleCode;
+  private int roleCode;
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class RoleMenu {
 
-  private String roleCode;
-  private String menuCode;
+  private int roleCode;
+  private int menuCode;
 
 }

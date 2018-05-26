@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class AdminMenu {
 
-  private String code;
+  private int code;
   private String name;
   private String url;
   private String subUrl;

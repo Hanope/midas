@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class BuyDetail {
 
-  private String buyIdx;
-  private String detailIdx;
+  private int buyIdx;
+  private int detailIdx;
 }

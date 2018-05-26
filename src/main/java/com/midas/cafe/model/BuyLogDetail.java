@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class BuyLogDetail {
 
-  private String idx;
+  private int idx;
   private String menuCode;
   private String couponCode;
   private int price;
