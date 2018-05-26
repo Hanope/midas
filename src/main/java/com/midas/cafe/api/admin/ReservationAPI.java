@@ -44,6 +44,7 @@ public class ReservationAPI
 	{
 		LoginVO login = (LoginVO) session.getAttribute("login");
 		String loginID = login.getId();
+		session.removeAttribute("notify");
 		return userService.notifyOff(loginID);
 	}
 }

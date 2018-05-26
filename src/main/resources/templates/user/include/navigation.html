@@ -42,10 +42,10 @@
             success: function (response) {
                 var result = response['result'];
                 var data = response['message'];
+                console.log(response);
                 // $('#text-discount').val('');
                 if (!result)
                 {
-                    alert(data);
                     return;
                 }
                 else
