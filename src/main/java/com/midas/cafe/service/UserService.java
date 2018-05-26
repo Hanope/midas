@@ -1,5 +1,6 @@
 package com.midas.cafe.service;
 
+import com.midas.cafe.common.StrUtil;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
 import com.midas.cafe.repository.menu.MenuDao;
@@ -34,9 +35,17 @@ public class UserService
 		return userDao.selectReservation(loginID);
 	}
 
-	public void addReservation(UserReservation reservation)
+	public void addReservation(String loginID, String reserveDt, String description, List<String> detail)
 	{
-		userDao.insertReservation(reservation);
+		userDao.insertReservation(loginID, reserveDt, description);
+		Integer reservIdx = userDao.getLastInsertID();
+		for(String str : detail)
+		{
+			List<String> list = StrUtil.splitToList(str, ":");
+			String code = list.get(0);
+			String amount = list.get(1);
+			userDao.insertReservationDetail(reservIdx, code, amount);
+		}
 	}
 
 	public List<Map<String, Object>> findAllUser() {

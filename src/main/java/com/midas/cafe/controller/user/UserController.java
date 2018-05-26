@@ -1,8 +1,10 @@
 package com.midas.cafe.controller.user;
 
 import com.midas.cafe.common.DateUtil;
+import com.midas.cafe.common.StrUtil;
 import com.midas.cafe.model.User;
 import com.midas.cafe.model.UserReservation;
+import com.midas.cafe.service.MenuService;
 import com.midas.cafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ public class UserController
 {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private MenuService menuService;
 
 	@GetMapping("/login")
 	public String loginGet()
@@ -69,16 +73,26 @@ public class UserController
 	public ModelAndView reservationAddView()
 	{// todo : loginID 세션에서 빼오는 걸로 수정
 		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("menus", menuService.findAllMenu());
 		modelAndView.setViewName("/user/reservation_add");
 		return modelAndView;
 	}
 
-	@PostMapping("/reservation")
-	public String addReservation(UserReservation reservation)
+	@PostMapping("/reservation/add")
+	public String reservationAdd(@RequestParam String reservedt, @RequestParam String str, @RequestParam String note)
 	{
-		userService.addReservation(reservation);
-		return "/user/reservation_list";
+		String loginID = "admin"; // todo : 추후 세션에서 가져오도록 수정
+		List<String> list = StrUtil.splitToList(str, ",");
+		userService.addReservation(loginID, reservedt, note, list);
+		return "redirect:/user/reservation";
 	}
+
+//	@PostMapping("/reservation")
+//	public String addReservation(UserReservation reservation)
+//	{
+//		userService.addReservation(reservation);
+//		return "/user/reservation_list";
+//	}
 
 	@PostMapping("/reservation/cancel")
 	public String cancelReservation(UserReservation reservation)

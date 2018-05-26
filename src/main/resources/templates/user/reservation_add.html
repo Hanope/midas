@@ -7,13 +7,9 @@
     <title>MIDAS</title>
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
-    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
-    <link rel="stylesheet" href="/assets/css/Login-Form-Clean.css">
-    <link rel="stylesheet" href="/assets/css/MUSA_panel-table-1.css">
-    <link rel="stylesheet" href="/assets/css/MUSA_panel-table.css">
-    <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
-    <link rel="stylesheet" href="/assets/css/Registration-Form-with-Photo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.min.css">
     <link rel="stylesheet" href="/assets/css/jquery-ui.css">
 </head>
 
@@ -32,84 +28,180 @@
             </div>
         </nav>
     </div>
-    <div class="register-photo">
-        <button class="btn btn-sm btn-primary btn-create" type="button" onclick="page.goList()" style="margin-left: 120px">목록으로</button>
-        <div class="form-container" style="margin-left:120px;margin-top: 30px">
-            <form method="post">
-                <h2 class="text-center"><strong>예약등록</strong></h2>
-            <div class="form-group"><label>예약일시</label><input class="form-control" placeholder="예약일시" type="text" id="datepicker"></div>
-            <button class="btn btn-secondary btn-sm" id="menuadd">메뉴추가</button>
-            <!--<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" id="menuadd">메뉴추가</button>-->
-                <table id="my_table">
-                    <tr><td>
-                        <div class="form-group"><label>품목선택</label> <select class="form-control">
-                            <option value="12" selected="">커피</option>
-                            <option value="13">딸기</option>
-                            <option value="14">빵</option>
-                        </select></div>
-                        <div class="form-group"><label>수량</label><input class="form-control" type="text" placeholder="주문수량입력"></div>
-                    </td></tr>
-                </table>
-            <div class="form-group"><button class="btn btn-primary btn-block" type="submit" style="background-color:rgb(71,119,244);">등록하기</button></div>
-        </form>
-    </div>
-    </div>
+    <main class="page projects-page">
+        <section class="portfolio-block projects-cards">
+            <div class="container">
+                <div class="heading">
+                    <h2>주문접수</h2>
+                </div>
+                <div class="row product-list">
+                    {{#menus}}
+                    <div class="col-sm-6 col-md-4 product-item">
+                        <div class="product-container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="#" class="product-image">
+                                        <img src="{{#file_url}}{{file_url}}{{/file_url}}{{^file_url}}/img/default.png{{/file_url}}">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h2><a href="#">{{menu_name}}</a></h2>
+                                </div>
+                                <div class="col-4"><a href="#" class="small-text">게시중</a></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p class="product-description">{{category_name}}</p>
+                                    <div class="row"><div class="col-12"><p class="product-price">{{price}}원</p></div></div>
+                                    <div class="row">
+                                        <input type="hidden" name="code" value="{{menu_code}}">
+                                        <div class="col-6"><input type="number" name="amount" class="form-control" placeholder="수량"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>주문하기</label><input type="checkbox" name="image[]" value=""/>
+                        </div>
+                    </div>
+                    {{/menus}}
+                </div>
+            </div>
+        </section>
+        <div class="form-group"><label>예약일시</label><input class="form-control" placeholder="예약일시" type="text" id="datepicker"></div>
+        <div class="form-group"><label>기타요청사항</label><input class="form-control" placeholder="기타요청사항" type="text" id="note"></div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="button" style="background-color:rgb(71,119,244);" onclick="doSave();">등록하기</button>
+            <!--<button class="btn btn-primary btn-block" type="submit" style="background-color:rgb(71,119,244);">등록하기</button>-->
+        </div>
+    </main>
+
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/jquery-ui.js"></script>
-    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/assets/js/theme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <script>
+        // image picker
+        // $(".product-container").on("click", function (e) {
+        //   var $checkbox = $(this).find('input[type="checkbox"]');
+        //   $checkbox.prop("checked",!$checkbox.prop("checked"))
+        //   e.preventDefault();
+        // });
         $(function () {
             $("#datepicker").datepicker(
                 {
-                    dateFormat:'yy-mm-dd'
+                    dateFormat: 'yy-mm-dd'
                 }
             );
-
         });
 
-        $(document).ready(){
-            var htmlrow = '<tr><td><div class="modal-body"> <div class="form-group"><label>품목선택</label> <select class="form-control"> <option value="12" selected="">커피</option> <option value="13">딸기</option> <option value="14">빵</option> </select> </div> <div class="form-group"><label>수량</label><input class="form-control" type="text" placeholder="주문수량입력"></div> </div></td></tr>'
-            $('#menuadd').appendChild(htmlrow);
-        }
-        var page =
-            {
-                goList: function () {
-                    window.location.href = '/user/reservation';
-                }
-            };
+        $('#btn-menu-search').click(function() {
+        var menuName = $('#text-menu').val();
+        console.log(menuName);
+        $.ajax({
+          url: '/api/admin/menus/' + menuName,
+          dataType: 'json',
+          success: function(response) {
+            var result = response['result'];
+            var data = response['message'];
+
+            if (!result) {
+              alert(data);
+              return;
+            } else {
+              $('.product-item').remove();
+              for (var i = 0; i < data.length; i++) {
+                $('.product-list').append(viewMenus(data[i]));
+              }
+            }
+          }
+        });
+      });
+
+      $(document).on('click', '#btn-modify', function() {
+        var name = $('#modified-name').val();
+        var price = $('#modified-price').val();
+
+        console.log(name);
+        console.log(price);
+      });
+
+      function viewMenus(data) {
+        var img_url = data['file_url'] == null ? '/img/default.png' : data['file_url'];
+        var template = '<div class="col-sm-6 col-md-4 product-item">\n'
+            + '                        <div class="product-container">\n'
+            + '                            <div class="row">\n'
+            + '                                <div class="col-md-12">\n'
+            + '                                    <a href="#" class="product-image">\n'
+            + '                                        <img src="' + img_url +'">\n'
+            + '                                    </a>\n'
+            + '                                </div>\n'
+            + '                            </div>\n'
+            + '                            <div class="row">\n'
+            + '                                <div class="col-8">\n'
+            + '                                    <h2><a href="#">' + data['menu_name'] + '</a></h2>\n'
+            + '                                </div>\n'
+            + '                                <div class="col-4"><a href="#" class="small-text">게시중</a></div>\n'
+            + '                            </div>\n'
+            + '                            <div class="row">\n'
+            + '                                <div class="col-12">\n'
+            + '                                    <p class="product-description">' + data['category_name'] + '</p>\n'
+            + '                                    <div class="row"><div class="col-12"><p class="product-price">' + data['price'] + '원</p></div></div>\n'
+            + '                                    <div class="row">\n'
+            + '                                        <input type="hidden" name="code" value="' + data['menu_code'] + '">\n'
+            + '                                        <div class="col-6"<input type="number" name="amount" class="form-control" placeholder="수량"></div>'
+            + '                                    </div>\n'
+            + '                                </div>\n'
+            + '                            </div>\n'
+            + '                        </div>\n'
+            + '                    </div>'
+        return template;
+      }
+      function doSave()
+      {
+          var saveStr = "";
+          $('.product-item').each(function (index,item) {
+              if ($(this).find('input:checkbox[name="image[]"]').is(":checked"))
+              {
+                  var code = $(this).find('input[name="code"]').val();
+                  var amount = $(this).find('input[name="amount"]').val();
+                  if(amount ==null || amount == "" || amount == undefined){
+                    alert('수량을 입력해 주시기 바랍니다.');
+                    return false;
+                  }
+                  if(saveStr != "")
+                      saveStr += ",";
+                  saveStr += (code+ ":" + amount);
+              }
+          });
+
+          if(saveStr == "")
+          {
+              alert('등록할 값이 없습니다.');
+              return false;
+          }
+
+          alert(saveStr);
+
+          // 예약일시가 입력되었는지 확인한다.
+          if($('#datepicker').val() == ""){
+              alert('예약일시를 입력해 주시기 바랍니다.');
+          }
+
+          var $form = $('<form></form>');
+          $form.attr('action', '/user/reservation/add');
+          $form.attr('method', 'post');
+          $form.appendTo('body');
+
+          var reserveDt = $('<input type="hidden" value="'+ $('#datepicker').val()+'" name="reservedt">');
+          var str = $('<input type="hidden" value="'+saveStr+'" name="str">');
+          var note = $('<input type="hidden" value="'+ $('#note').val()+'" name="note">');
+
+          $form.append(reserveDt).append(str).append(note);
+          $form.submit();
+      }
+
     </script>
-
-    <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal">메뉴추가</button>
-
-    <!-- 모달 처리 부분 -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">예약할 메뉴 선택</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group"><label>품목선택</label>
-                        <select class="form-control" id="type_select">
-                            <option value="12" selected="">커피</option>
-                            <option value="13">딸기</option>
-                            <option value="14">빵</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>수량</label><input class="form-control" type="text" placeholder="주문수량입력"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary">저장후 닫기</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </body>
 
 </html>
