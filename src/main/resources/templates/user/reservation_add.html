@@ -38,14 +38,14 @@
                             <div class="row">
                                 <div class="col-12">
                                     <p class="product-description">{{category_name}}</p>
-                                    <div class="row"><div class="col-12"><p class="product-price">{{price}}원</p></div></div>
+                                    <div class="row"><div class="col-12"><p class="product-price" id="price-{{menu_code}}">{{price}}원</p></div></div>
                                     <div class="row">
                                         <input type="hidden" name="code" value="{{menu_code}}">
-                                        <div class="col-6"><input type="number" name="amount" class="form-control" placeholder="수량"></div>
+                                        <div class="col-6"><input type="number" name="amount" class="form-control quantity-control" id="quantity-{{menu_code}}" placeholder="수량" data-product="{{menu_code}}"></div>
                                     </div>
                                 </div>
                             </div>
-                            <label>주문하기</label><input type="checkbox" name="image[]" value=""/>
+                            <label>주문하기</label><input type="checkbox" name="image[]" value="{{menu_code}}" id="order-chk-{{menu_code}}" class="order-chk"/>
                         </div>
                     </div>
                     {{/menus}}
@@ -78,6 +78,25 @@
         //   $checkbox.prop("checked",!$checkbox.prop("checked"))
         //   e.preventDefault();
         // });
+
+        var totalPrice = 0;
+        $('.order-chk').click(function() {
+          var productNumber = $(this).val();
+          var price = $('#price-' + productNumber).text();
+          var quantity = $('#quantity-' + productNumber).val();
+
+          price = price.slice(0, -1);
+          if ($(this).prop('checked'))
+            totalPrice += parseInt(quantity) * parseInt(price);
+          else
+            totalPrice -= parseInt(quantity) * parseInt(price);
+          showTotalPrice();
+        });
+
+        function showTotalPrice() {
+          $('#sumIs').text(totalPrice + '원');
+        }
+
         $(document).ready(function () {
             $("#datepicker").datepicker(
                 {
